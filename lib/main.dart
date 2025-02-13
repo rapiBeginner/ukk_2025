@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:raffi_ukk2025/user/userIndex.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
@@ -34,6 +35,42 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final formKey = GlobalKey<FormState>();
+  final usernameCtrl = TextEditingController();
+  final pwCtrl = TextEditingController();
+  List user = [
+    {"UserID": 1, "Username": "Admin123", "Password": "123456"},
+    {"UserID": 1, "Username": "Petugas123", "Password": "1234"}
+  ];
+  void login() {
+    if (formKey.currentState!.validate()) {
+      var result = user
+          .where((item) =>
+              item["Username"] == usernameCtrl.text &&
+              item["Password"] == pwCtrl.text)
+          .toList();
+      if (result.isNotEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+            "Login berhasil",
+            style: GoogleFonts.raleway(color: Colors.white),
+          ),
+          backgroundColor: Colors.green,
+        ));
+        usernameCtrl.clear();
+        pwCtrl.clear();
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Userindex()));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+            "Username atau password salah",
+            style: GoogleFonts.raleway(color: Colors.white),
+          ),
+          backgroundColor: Colors.red,
+        ));
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -118,6 +155,15 @@ class _MyHomePageState extends State<MyHomePage> {
                                               topRight: Radius.circular(20))),
                                       child: Center(
                                         child: TextFormField(
+                                          controller: usernameCtrl,
+                                          validator: (value) {
+                                            if (value == null ||
+                                                value.isEmpty) {
+                                              return "Password tidak boleh kosong";
+                                            }
+
+                                            return null;
+                                          },
                                           decoration: InputDecoration(
                                               border: InputBorder.none,
                                               labelText: "Username"),
@@ -140,6 +186,15 @@ class _MyHomePageState extends State<MyHomePage> {
                                                   Radius.circular(20))),
                                       child: Center(
                                         child: TextFormField(
+                                          controller: pwCtrl,
+                                          validator: (value) {
+                                            if (value == null ||
+                                                value.isEmpty) {
+                                              return "Username tidak boleh kosong";
+                                            }
+
+                                            return null;
+                                          },
                                           decoration: InputDecoration(
                                               border: InputBorder.none,
                                               labelText: "Password"),
@@ -153,9 +208,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                 height: constraint.maxHeight / 9,
                               ),
                               ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  login();
+                                },
                                 style: ElevatedButton.styleFrom(
-                                  fixedSize: Size( constraint.maxWidth/2,constraint.maxHeight/10),
+                                    fixedSize: Size(constraint.maxWidth / 2,
+                                        constraint.maxHeight / 10),
                                     foregroundColor: Colors.white,
                                     backgroundColor:
                                         Color.fromARGB(255, 117, 131, 255)),
