@@ -37,19 +37,18 @@ class _MyHomePageState extends State<MyHomePage> {
   final formKey = GlobalKey<FormState>();
   final usernameCtrl = TextEditingController();
   final pwCtrl = TextEditingController();
-  List user = [
-    {"UserID": 1, "Username": "Admin123", "Password": "123456"},
-    {"UserID": 1, "Username": "Petugas123", "Password": "1234"}
-  ];
-  void login() {
+  var hidePw = true;
+
+  void login() async {
     if (formKey.currentState!.validate()) {
-      var result = user
-          .where((item) =>
-              item["Username"] == usernameCtrl.text &&
-              item["Password"] == pwCtrl.text)
-          .toList();
+      var result = await Supabase.instance.client
+          .from("User")
+          .select()
+          .eq("Username", usernameCtrl.text)
+          .eq("Password", pwCtrl.text);
       if (result.isNotEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+           duration: Duration(milliseconds: 1000),
           content: Text(
             "Login berhasil",
             style: GoogleFonts.raleway(color: Colors.white),
@@ -58,9 +57,16 @@ class _MyHomePageState extends State<MyHomePage> {
         ));
         usernameCtrl.clear();
         pwCtrl.clear();
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Userindex()));
+        print(result);
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Userindex(
+                      login: result,
+                    )));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          duration: Duration(milliseconds: 1000),
           content: Text(
             "Username atau password salah",
             style: GoogleFonts.raleway(color: Colors.white),
@@ -159,7 +165,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                           validator: (value) {
                                             if (value == null ||
                                                 value.isEmpty) {
-                                              return "Password tidak boleh kosong";
+                                              return "Username tidak boleh kosong";
                                             }
 
                                             return null;
@@ -190,12 +196,19 @@ class _MyHomePageState extends State<MyHomePage> {
                                           validator: (value) {
                                             if (value == null ||
                                                 value.isEmpty) {
-                                              return "Username tidak boleh kosong";
+                                              return "Password tidak boleh kosong";
                                             }
-
                                             return null;
                                           },
+                                          obscureText: hidePw,
                                           decoration: InputDecoration(
+                                              suffix: IconButton(
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      hidePw = !hidePw;
+                                                    });
+                                                  },
+                                                  icon: Icon(Icons.visibility)),
                                               border: InputBorder.none,
                                               labelText: "Password"),
                                         ),
