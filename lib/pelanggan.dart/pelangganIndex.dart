@@ -4,9 +4,6 @@ import 'package:raffi_ukk2025/drawer.dart';
 import 'package:raffi_ukk2025/pelanggan.dart/addPelanggan.dart';
 import 'package:raffi_ukk2025/pelanggan.dart/deletePelanggan.dart';
 import 'package:raffi_ukk2025/pelanggan.dart/editPelanggan.dart';
-import 'package:raffi_ukk2025/produk/addProduk.dart';
-import 'package:raffi_ukk2025/produk/deleteProduk.dart';
-import 'package:raffi_ukk2025/produk/editProduk.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Pelangganindex extends StatefulWidget {

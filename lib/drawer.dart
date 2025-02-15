@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:raffi_ukk2025/pelanggan.dart/pelangganIndex.dart';
+import 'package:raffi_ukk2025/penjualan/penjualanIndex.dart';
 import 'package:raffi_ukk2025/produk/produkIndex.dart';
 import 'package:raffi_ukk2025/user/userIndex.dart';
 
@@ -47,7 +48,12 @@ myDrawer(BuildContext context, String username, String role, List login) {
           title: Text("Produk"),
         ),
         ListTile(
-          onTap: () {},
+          onTap: () {
+             Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Penjualanindex(login: login)));
+          },
           leading: Icon(Icons.shopping_cart),
           title: Text("Penjualan"),
         ),
