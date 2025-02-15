@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:raffi_ukk2025/produk/produkIndex.dart';
+import 'package:raffi_ukk2025/user/userIndex.dart';
 
-myDrawer(String username, String role) {
+myDrawer( BuildContext context, String username, String role, List login) {
   return Drawer(
     child: Column(
       children: [
@@ -14,7 +16,7 @@ myDrawer(String username, String role) {
           ),
         )
         ,ListTile(
-          onTap: (){},
+          onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>Userindex(login: login)));},
           leading: Icon(Icons.person),
           title: Text("Pengguna"),
         ),
@@ -24,7 +26,7 @@ myDrawer(String username, String role) {
           title: Text("Pelanggan"),
         ),
         ListTile(
-          onTap: (){},
+          onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>Produkindex(login: login)));},
           leading: Icon(Icons.card_travel),
           title: Text("Produk"),
         ),

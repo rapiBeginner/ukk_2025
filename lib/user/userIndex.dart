@@ -17,7 +17,7 @@ class Userindex extends StatefulWidget {
 class _UserindexState extends State<Userindex> {
   List user = [];
   fetchUser() async {
-    var result = await Supabase.instance.client.from('User').select();
+    var result = await Supabase.instance.client.from('User').select().order("UserID", ascending: true);
     setState(() {
       user = result;
     });
@@ -33,8 +33,9 @@ class _UserindexState extends State<Userindex> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer:myDrawer(widget.login[0]["Username"], widget.login[0]["Role"]),
+      drawer:myDrawer(context,widget.login[0]["Username"], widget.login[0]["Role"], widget.login),
       appBar: AppBar(
+        centerTitle: true,
         backgroundColor: Color.fromARGB(255, 20, 78, 253),
         foregroundColor: Colors.white,
         title: Text(

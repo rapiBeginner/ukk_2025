@@ -1,38 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-editUser(BuildContext context, String username, String pw, int Id) {
+addProduk(BuildContext context) {
   final formKey = GlobalKey<FormState>();
-  final usernameCtrl = TextEditingController( text: username);
-  final pwCtrl = TextEditingController(text: pw);
-  bool hidePw = true;
+  final namaCtrl = TextEditingController();
+  final hargaCtrl = TextEditingController();
+  final stokCtrl = TextEditingController();
 
-  userEdit() async {
+  produkAdd() async {
     if (formKey.currentState!.validate()) {
-       var checkUser = await Supabase.instance.client
-          .from("User")
+      var checkProduk = await Supabase.instance.client
+          .from("produk")
           .select()
-          .eq("Username", usernameCtrl.text).neq("UserID", Id);
-      if (checkUser.isNotEmpty) {
-         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-           duration: Duration(milliseconds: 1000),
+          .like("NamaProduk", namaCtrl.text);
+      if (checkProduk.isNotEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          duration: Duration(milliseconds: 1000),
           content: Text(
-            "Username telah digunakan",
+            "Produk ini sudah tersedia",
             style: GoogleFonts.raleway(color: Colors.white),
           ),
           backgroundColor: Colors.red,
         ));
-      }
-      else{
-        var result = await Supabase.instance.client.from("User").update(
-          {"Username": usernameCtrl.text, "Password": pwCtrl.text}
-        ).eq("UserID", Id);
+      } else {
+        var result = await Supabase.instance.client.from("produk").insert([
+          {
+            "NamaProduk": namaCtrl.text,
+            "Harga": hargaCtrl.text,
+            "Stok": stokCtrl.text
+          }
+        ]);
         if (result == null) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-             duration: Duration(milliseconds: 1000),
+            duration: Duration(milliseconds: 1000),
             content: Text(
-              "Edit pengguna berhasil",
+              "Tambah produk berhasil",
               style: GoogleFonts.raleway(color: Colors.white),
             ),
             backgroundColor: Colors.green,
@@ -49,7 +53,7 @@ editUser(BuildContext context, String username, String pw, int Id) {
         return StatefulBuilder(builder: (context, setState) {
           return Dialog(
             child: Container(
-                height: MediaQuery.of(context).size.height / 2.2,
+                height: MediaQuery.of(context).size.height / 1.7,
                 width: MediaQuery.of(context).size.width / 1.3,
                 child: LayoutBuilder(builder: (context, constraint) {
                   return Padding(
@@ -60,55 +64,68 @@ editUser(BuildContext context, String username, String pw, int Id) {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "Edit Pengguna",
+                              "Tambah Produk",
                               style: GoogleFonts.raleway(
                                   fontSize: constraint.maxWidth / 15),
                             ),
                             SizedBox(
-                              height: constraint.maxHeight / 10,
+                              height: constraint.maxHeight / 15,
                             ),
                             TextFormField(
-                              controller: usernameCtrl,
+                              controller: namaCtrl,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return "Username tidak boleh kosong";
+                                  return "Nama produk tidak boleh kosong";
                                 }
                                 return null;
                               },
                               decoration: InputDecoration(
-                                  labelText: "Username",
+                                  labelText: "Nama produk",
                                   labelStyle: GoogleFonts.raleway(),
+                                  border: OutlineInputBorder()),
+                            ),
+                            SizedBox(
+                              height: constraint.maxHeight / 25,
+                            ),
+                            TextFormField(
+                              controller: hargaCtrl,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return "Harga tidak boleh kosong";
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                  labelText: "Harga",
+                                  border: OutlineInputBorder()),
+                            ),
+                            SizedBox(
+                              height: constraint.maxHeight / 25,
+                            ),
+                            TextFormField(
+                              controller: stokCtrl,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return "Stok tidak boleh kosong";
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                  labelText: "Stok",
                                   border: OutlineInputBorder()),
                             ),
                             SizedBox(
                               height: constraint.maxHeight / 20,
                             ),
-                            TextFormField(
-                              controller: pwCtrl,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return "Password tidak boleh kosong";
-                                }
-                                return null;
-                              },
-                              obscureText: hidePw,
-                              decoration: InputDecoration(
-                                  suffix: IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          hidePw = !hidePw;
-                                        });
-                                      },
-                                      icon: Icon(Icons.visibility)),
-                                  labelText: "Password",
-                                  border: OutlineInputBorder()),
-                            ),
-                            SizedBox(
-                              height: constraint.maxHeight / 15,
-                            ),
                             ElevatedButton(
                               onPressed: () {
-                                userEdit();
+                                produkAdd();
                               },
                               child: Text(
                                 "Simpan",
