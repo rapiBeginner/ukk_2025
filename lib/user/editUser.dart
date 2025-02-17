@@ -4,33 +4,34 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 editUser(BuildContext context, String username, String pw, int Id) {
   final formKey = GlobalKey<FormState>();
-  final usernameCtrl = TextEditingController( text: username);
+  final usernameCtrl = TextEditingController(text: username);
   final pwCtrl = TextEditingController(text: pw);
   bool hidePw = true;
 
   userEdit() async {
     if (formKey.currentState!.validate()) {
-       var checkUser = await Supabase.instance.client
+      var checkUser = await Supabase.instance.client
           .from("User")
           .select()
-          .eq("Username", usernameCtrl.text).neq("UserID", Id);
+          .eq("Username", usernameCtrl.text)
+          .neq("UserID", Id);
       if (checkUser.isNotEmpty) {
-         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-           duration: Duration(milliseconds: 1000),
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          duration: Duration(milliseconds: 1000),
           content: Text(
             "Username telah digunakan",
             style: GoogleFonts.raleway(color: Colors.white),
           ),
           backgroundColor: Colors.red,
         ));
-      }
-      else{
-        var result = await Supabase.instance.client.from("User").update(
-          {"Username": usernameCtrl.text, "Password": pwCtrl.text}
-        ).eq("UserID", Id);
+      } else {
+        var result = await Supabase.instance.client.from("User").update({
+          "Username": usernameCtrl.text,
+          "Password": pwCtrl.text
+        }).eq("UserID", Id);
         if (result == null) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-             duration: Duration(milliseconds: 1000),
+            duration: Duration(milliseconds: 1000),
             content: Text(
               "Edit pengguna berhasil",
               style: GoogleFonts.raleway(color: Colors.white),
@@ -106,22 +107,36 @@ editUser(BuildContext context, String username, String pw, int Id) {
                             SizedBox(
                               height: constraint.maxHeight / 15,
                             ),
-                            ElevatedButton(
-                              onPressed: () {
-                                userEdit();
-                              },
-                              child: Text(
-                                "Simpan",
-                                style: GoogleFonts.raleway(),
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                  fixedSize: Size(
-                                    constraint.maxWidth / 2,
-                                    constraint.maxHeight / 10,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.red,
+                                      foregroundColor: Colors.white),
+                                  child: Text("Batal"),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    userEdit();
+                                  },
+                                  child: Text(
+                                    "Simpan",
+                                    style: GoogleFonts.raleway(),
                                   ),
-                                  backgroundColor:
-                                      Color.fromARGB(255, 20, 78, 253),
-                                  foregroundColor: Colors.white),
+                                  style: ElevatedButton.styleFrom(
+                                      fixedSize: Size(
+                                        constraint.maxWidth / 2,
+                                        constraint.maxHeight / 10,
+                                      ),
+                                      backgroundColor:
+                                          Color.fromARGB(255, 20, 78, 253),
+                                      foregroundColor: Colors.white),
+                                )
+                              ],
                             )
                           ],
                         )),

@@ -16,31 +16,30 @@ addUser(BuildContext context) {
           .eq("Username", usernameCtrl.text);
       if (checkUser.isNotEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-           duration: Duration(milliseconds: 1000),
+          duration: Duration(milliseconds: 1000),
           content: Text(
             "Username telah digunakan",
             style: GoogleFonts.raleway(color: Colors.white),
           ),
           backgroundColor: Colors.red,
         ));
-      }
-else{
+      } else {
         var result = await Supabase.instance.client.from("User").insert([
-        {"Username": usernameCtrl.text, "Password": pwCtrl.text}
-      ]);
-      if (result == null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-           duration: Duration(milliseconds: 1000),
-          content: Text(
-            "Registrasi berhasil",
-            style: GoogleFonts.raleway(color: Colors.white),
-          ),
-          backgroundColor: Colors.green,
-        ));
-        Navigator.of(context).pop(true);
+          {"Username": usernameCtrl.text, "Password": pwCtrl.text}
+        ]);
+        if (result == null) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            duration: Duration(milliseconds: 1000),
+            content: Text(
+              "Registrasi berhasil",
+              style: GoogleFonts.raleway(color: Colors.white),
+            ),
+            backgroundColor: Colors.green,
+          ));
+          Navigator.of(context).pop(true);
+        }
       }
     }
-}
   }
 
   return showDialog(
@@ -78,7 +77,6 @@ else{
                               decoration: InputDecoration(
                                   labelText: "Username",
                                   labelStyle: GoogleFonts.raleway(),
-
                                   border: OutlineInputBorder()),
                             ),
                             SizedBox(
@@ -102,28 +100,41 @@ else{
                                       },
                                       icon: Icon(Icons.visibility)),
                                   labelText: "Password",
-                                  
                                   border: OutlineInputBorder()),
                             ),
                             SizedBox(
                               height: constraint.maxHeight / 15,
                             ),
-                            ElevatedButton(
-                              onPressed: () {
-                                insertUser();
-                              },
-                              child: Text(
-                                "Simpan",
-                                style: GoogleFonts.raleway(),
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                  fixedSize: Size(
-                                    constraint.maxWidth / 2,
-                                    constraint.maxHeight / 10,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.red,
+                                      foregroundColor: Colors.white),
+                                  child: Text("Batal"),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    insertUser();
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                      fixedSize: Size(
+                                        constraint.maxWidth / 2,
+                                        constraint.maxHeight / 10,
+                                      ),
+                                      backgroundColor:
+                                          Color.fromARGB(255, 20, 78, 253),
+                                      foregroundColor: Colors.white),
+                                  child: Text(
+                                    "Simpan",
+                                    style: GoogleFonts.raleway(),
                                   ),
-                                  backgroundColor:
-                                      Color.fromARGB(255, 20, 78, 253),
-                                  foregroundColor: Colors.white),
+                                )
+                              ],
                             )
                           ],
                         )),

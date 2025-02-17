@@ -24,35 +24,49 @@ deleteUser(BuildContext context, int id, String username) {
                   SizedBox(
                     height: constraint.maxHeight / 8,
                   ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      var result = await Supabase.instance.client
-                          .from("User")
-                          .delete()
-                          .eq("UserID", id);
-                      if (result == null) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                           duration: Duration(milliseconds: 1000),
-                          content: Text(
-                            "Hapus pengguna berhasil",
-                            style: GoogleFonts.raleway(color: Colors.white),
-                          ),
-                          backgroundColor: Colors.green,
-                        ));
-                        Navigator.of(context).pop(true);
-                      }
-                    },
-                    child: Text(
-                      "Hapus",
-                      style: GoogleFonts.raleway(),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                        fixedSize: Size(
-                          constraint.maxWidth / 2,
-                          constraint.maxHeight / 10,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red,
+                            foregroundColor: Colors.white),
+                        child: Text("Batal"),
+                      ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          var result = await Supabase.instance.client
+                              .from("User")
+                              .delete()
+                              .eq("UserID", id);
+                          if (result == null) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              duration: Duration(milliseconds: 1000),
+                              content: Text(
+                                "Hapus pengguna berhasil",
+                                style: GoogleFonts.raleway(color: Colors.white),
+                              ),
+                              backgroundColor: Colors.green,
+                            ));
+                            Navigator.of(context).pop(true);
+                          }
+                        },
+                        child: Text(
+                          "Hapus",
+                          style: GoogleFonts.raleway(),
                         ),
-                        backgroundColor: Color.fromARGB(255, 253, 20, 55),
-                        foregroundColor: Colors.white),
+                        style: ElevatedButton.styleFrom(
+                            fixedSize: Size(
+                              constraint.maxWidth / 2,
+                              constraint.maxHeight / 10,
+                            ),
+                            backgroundColor: Color.fromARGB(255, 20, 78, 253),
+                            foregroundColor: Colors.white),
+                      )
+                    ],
                   )
                 ],
               );

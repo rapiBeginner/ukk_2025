@@ -66,7 +66,7 @@ class _PelangganindexState extends State<Pelangganindex> {
                               onPressed: () {
                                 setState(() {
                                   searcCtrl.clear();
-                                  produk=filterProduk;
+                                  produk = filterProduk;
                                   barTitle = Text(
                                     "Pelanggan",
                                     style: GoogleFonts.raleway(),
@@ -99,17 +99,17 @@ class _PelangganindexState extends State<Pelangganindex> {
                                       .startsWith(value.toLowerCase()) ||
                                   item["Alamat"]
                                       .toString()
-                                      .toLowerCase()   
+                                      .toLowerCase()
                                       .startsWith(value.toLowerCase()) ||
                                   item["NomorTelepon"]
                                       .toString()
                                       .toLowerCase()
-                                      .startsWith(value.toLowerCase());  
+                                      .startsWith(value.toLowerCase());
                             }).toList();
                           });
-                        }else{
+                        } else {
                           setState(() {
-                            produk=filterProduk;
+                            produk = filterProduk;
                           });
                         }
                       },
@@ -151,15 +151,17 @@ class _PelangganindexState extends State<Pelangganindex> {
                                 height: constraint.maxHeight / 8,
                               ),
                               Text("${produks["Alamat"]}",
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
                                   style: GoogleFonts.raleway(
-                                      fontSize: constraint.maxHeight / 8)),
+                                    fontSize: constraint.maxHeight / 8,
+                                  )),
                               SizedBox(
                                 height: constraint.maxHeight / 12,
                               ),
                               Text("${produks["NomorTelepon"]}",
-                                      style: GoogleFonts.raleway(
-                                          fontSize: constraint.maxHeight / 8))
-                                
+                                  style: GoogleFonts.raleway(
+                                      fontSize: constraint.maxHeight / 8))
                             ],
                           ),
                           Spacer(),

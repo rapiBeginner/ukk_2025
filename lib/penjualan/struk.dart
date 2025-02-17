@@ -1,5 +1,3 @@
-import 'dart:js_interop';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pdf/pdf.dart';
@@ -46,37 +44,70 @@ class _StrukState extends State<Struk> {
           canChangePageFormat: false,
           canDebug: false,
           build: (format) async {
+            final titleFont = await PdfGoogleFonts.grechenFuemenRegular();
             final fontBold = await PdfGoogleFonts.ralewayBlack();
-            final font= await PdfGoogleFonts.ralewayLight();
+            final font = await PdfGoogleFonts.ralewayLight();
             var pdf = pdfWidget.Document();
             pdf.addPage(pdfWidget.Page(build: (context) {
               return pdfWidget.Column(
-                  mainAxisAlignment: pdfWidget.MainAxisAlignment.center,
+                  mainAxisAlignment: pdfWidget.MainAxisAlignment.spaceBetween,
                   children: [
-                    pdfWidget.Text(
-                        "Tanggal transaksi${penjualan["TanggalPenjualan"]}",
-                        style: pdfWidget.TextStyle(font: font, fontSize: 30)),
-                    ...List.generate(detail.length, (index) {
-                      return pdfWidget.Row(children: [
-                        pdfWidget.Text(
-                            "${detail[index]["produk"]["NamaProduk"]} (${detail[index]["JumlahProduk"]})",
-                            style:
-                                pdfWidget.TextStyle(font: font, fontSize: 30)),
-                        pdfWidget.Spacer(),
-                        pdfWidget.Text("Rp.${detail[index]["Subtotal"]}",
-                            style:
-                                pdfWidget.TextStyle(font: font, fontSize: 30)),
-                      ]);
-                    }), pdfWidget.Row(children: [
-                        pdfWidget.Text(
-                            "Total",
-                            style:
-                                pdfWidget.TextStyle(font: fontBold, fontSize: 30)),
-                        pdfWidget.Spacer(),
-                        pdfWidget.Text("Rp.${penjualan["TotalHarga"]}",
-                            style:
-                                pdfWidget.TextStyle(font: fontBold, fontSize: 30)),
-                      ])
+                    pdfWidget.Row(
+                        mainAxisAlignment:
+                            pdfWidget.MainAxisAlignment.center,
+                        children: [
+                          pdfWidget.Text("SienceStore",
+                              style: pdfWidget.TextStyle(
+                                  font: titleFont, fontSize: 50)),
+                        
+                        ]),
+                    pdfWidget.Container(
+                        padding: pdfWidget.EdgeInsets.only(top: 20, bottom: 20),
+                        child: pdfWidget.Column(
+                            mainAxisAlignment:
+                                pdfWidget.MainAxisAlignment.center,
+                            children: [
+                              pdfWidget.Row(children: [
+                                pdfWidget.Text("Tanggal transaksi:",
+                                    style: pdfWidget.TextStyle(
+                                        font: font, fontSize: 25)),
+                                pdfWidget.Spacer(),
+                                pdfWidget.Text(
+                                    "${penjualan["TanggalPenjualan"]}",
+                                    style: pdfWidget.TextStyle(
+                                        font: font, fontSize: 25)),
+                              ]),
+                              pdfWidget.SizedBox(height: 50),
+                              ...List.generate(detail.length, (index) {
+                                return pdfWidget.Row(children: [
+                                  pdfWidget.Text(
+                                      "${detail[index]["produk"]["NamaProduk"]} (${detail[index]["JumlahProduk"]})",
+                                      style: pdfWidget.TextStyle(
+                                          font: font, fontSize: 25)),
+                                  pdfWidget.Spacer(),
+                                  pdfWidget.Text(
+                                      "Rp.${detail[index]["Subtotal"]}",
+                                      style: pdfWidget.TextStyle(
+                                          font: font, fontSize: 25)),
+                                ]);
+                              }),
+                              pdfWidget.Row(children: [
+                                pdfWidget.Text("Total",
+                                    style: pdfWidget.TextStyle(
+                                        font: fontBold, fontSize: 25)),
+                                pdfWidget.Spacer(),
+                                pdfWidget.Text("Rp.${penjualan["TotalHarga"]}",
+                                    style: pdfWidget.TextStyle(
+                                        font: fontBold, fontSize: 25)),
+                              ])
+                            ])),
+                    pdfWidget.Row(
+                        mainAxisAlignment: pdfWidget.MainAxisAlignment.center,
+                        children: [
+                          pdfWidget.Text(
+                              "SienceStore\nJl.Lolaras no.7, Malang, Jawa Timur",
+                              textAlign: pdfWidget.TextAlign.center, style: pdfWidget.TextStyle(font: font, fontSize: 15))
+                        ])
                   ]);
             }));
             return pdf.save();

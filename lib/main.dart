@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:raffi_ukk2025/dashboard.dart';
 import 'package:raffi_ukk2025/user/userIndex.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -61,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) => Userindex(
+                builder: (context) =>Dashboard(
                       login: result,
                     )));
       } else {

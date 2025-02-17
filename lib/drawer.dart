@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:raffi_ukk2025/dashboard.dart';
+import 'package:raffi_ukk2025/main.dart';
 import 'package:raffi_ukk2025/pelanggan.dart/pelangganIndex.dart';
 import 'package:raffi_ukk2025/penjualan/penjualanIndex.dart';
 import 'package:raffi_ukk2025/produk/produkIndex.dart';
@@ -19,7 +21,17 @@ myDrawer(BuildContext context, String username, String role, List login) {
         ),
         ListTile(
           onTap: () {
-            Navigator.push(
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Dashboard(login: login)));
+          },
+          leading: Icon(Icons.stacked_bar_chart),
+          title: Text("Dashboard"),
+        ),
+        ListTile(
+          onTap: () {
+            Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                     builder: (context) => Userindex(login: login)));
@@ -29,7 +41,7 @@ myDrawer(BuildContext context, String username, String role, List login) {
         ),
         ListTile(
           onTap: () {
-            Navigator.push(
+            Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                     builder: (context) => Pelangganindex(login: login)));
@@ -39,7 +51,7 @@ myDrawer(BuildContext context, String username, String role, List login) {
         ),
         ListTile(
           onTap: () {
-            Navigator.push(
+            Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                     builder: (context) => Produkindex(login: login)));
@@ -49,13 +61,65 @@ myDrawer(BuildContext context, String username, String role, List login) {
         ),
         ListTile(
           onTap: () {
-             Navigator.push(
+            Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                     builder: (context) => Penjualanindex(login: login)));
           },
           leading: Icon(Icons.shopping_cart),
           title: Text("Penjualan"),
+        ),
+        ListTile(
+          onTap: () {
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return Dialog(
+                    child: Padding(
+                      padding: const EdgeInsets.all(15),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("Anda yakin ingin logout?"),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height / 25,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text("Batal"),
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.red,
+                                    foregroundColor: Colors.white),
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => MyHomePage()));
+                                },
+                                child: Text("Logout"),
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor:
+                                        Color.fromARGB(255, 20, 78, 253),
+                                    foregroundColor: Colors.white),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                });
+          },
+          leading: Icon(Icons.logout),
+          title: Text("Logout"),
         ),
       ],
     ),

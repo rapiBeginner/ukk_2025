@@ -42,7 +42,7 @@ class _PenjualanindexState extends State<Penjualanindex> {
         .order("PenjualanID", ascending: true);
     setState(() {
       penjualan = result;
-    
+
       // filterProduk = produk;
     });
   }
@@ -229,7 +229,31 @@ class _PenjualanindexState extends State<Penjualanindex> {
                                                             "Rp.${detailList[index]["Subtotal"]}")
                                                       ],
                                                     );
-                                                  })
+                                                  }),
+                                                  SizedBox(
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            25,
+                                                  ),
+                                                  ElevatedButton(
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                              backgroundColor:
+                                                                  Color
+                                                                      .fromARGB(
+                                                                          255,
+                                                                          20,
+                                                                          78,
+                                                                          253),
+                                                              foregroundColor:
+                                                                  Colors.white),
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                      child: Text("Kembali"))
                                                 ],
                                               ),
                                             ),

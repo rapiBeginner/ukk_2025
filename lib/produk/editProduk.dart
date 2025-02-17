@@ -5,33 +5,35 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 editProduk(BuildContext context, String nama, int harga, int stok, int Id) {
   final formKey = GlobalKey<FormState>();
-  final namaCtrl = TextEditingController( text: nama);
+  final namaCtrl = TextEditingController(text: nama);
   final hargaCtrl = TextEditingController(text: harga.toString());
-  final stokCtrl= TextEditingController(text: stok.toString());
+  final stokCtrl = TextEditingController(text: stok.toString());
 
   produkEdit() async {
     if (formKey.currentState!.validate()) {
-       var checkProduk = await Supabase.instance.client
+      var checkProduk = await Supabase.instance.client
           .from("produk")
           .select()
-          .like("NamaProduk", namaCtrl.text).neq("ProdukID", Id);
+          .like("NamaProduk", namaCtrl.text)
+          .neq("ProdukID", Id);
       if (checkProduk.isNotEmpty) {
-         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-           duration: Duration(milliseconds: 1000),
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          duration: Duration(milliseconds: 1000),
           content: Text(
             "Produk ini sudah tersedia",
             style: GoogleFonts.raleway(color: Colors.white),
           ),
           backgroundColor: Colors.red,
         ));
-      }
-      else{
-        var result = await Supabase.instance.client.from("produk").update(
-          {"NamaProduk": namaCtrl.text, "Harga": hargaCtrl.text, "Stok":stokCtrl.text}
-        ).eq("ProdukID", Id);
+      } else {
+        var result = await Supabase.instance.client.from("produk").update({
+          "NamaProduk": namaCtrl.text,
+          "Harga": hargaCtrl.text,
+          "Stok": stokCtrl.text
+        }).eq("ProdukID", Id);
         if (result == null) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-             duration: Duration(milliseconds: 1000),
+            duration: Duration(milliseconds: 1000),
             content: Text(
               "Edit produk berhasil",
               style: GoogleFonts.raleway(color: Colors.white),
@@ -86,14 +88,15 @@ editProduk(BuildContext context, String nama, int harga, int stok, int Id) {
                             ),
                             TextFormField(
                               controller: hargaCtrl,
-                              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return "Harga tidak boleh kosong";
                                 }
                                 return null;
                               },
-                             
                               decoration: InputDecoration(
                                   labelText: "Harga",
                                   border: OutlineInputBorder()),
@@ -103,20 +106,30 @@ editProduk(BuildContext context, String nama, int harga, int stok, int Id) {
                             ),
                             TextFormField(
                               controller: stokCtrl,
-                              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return "Stok tidak boleh kosong";
                                 }
                                 return null;
                               },
-                             
                               decoration: InputDecoration(
                                   labelText: "Stok",
                                   border: OutlineInputBorder()),
                             ),
                             SizedBox(
                               height: constraint.maxHeight / 20,
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text("Batal"),
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.red,
+                                  foregroundColor: Colors.white),
                             ),
                             ElevatedButton(
                               onPressed: () {

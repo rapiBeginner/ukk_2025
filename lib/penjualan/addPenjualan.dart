@@ -86,7 +86,7 @@ addPenjualan(BuildContext context, List produk, List pelanggan) {
                                               onPressed: () {
                                                 setState(
                                                   () {
-                                                    totalHarga -= produk[index]
+                                                    totalHarga -= produkBeli[index]
                                                         ["Subtotal"] as int;
                                                     produkBeli.removeAt(index);
                                                   },
@@ -222,49 +222,74 @@ addPenjualan(BuildContext context, List produk, List pelanggan) {
                                                           .height /
                                                       20,
                                                 ),
-                                                ElevatedButton(
-                                                  onPressed: () {
-                                                    if (formProduk.currentState!
-                                                        .validate()) {
-                                                      produkCtrl.dropDownValue!
-                                                                  .value[
-                                                              "JumlahProduk"] =
-                                                          int.parse(
-                                                              jumlahCtrl.text);
-                                                      produkCtrl.dropDownValue!
-                                                              .value[
-                                                          "Subtotal"] = (produkCtrl
-                                                              .dropDownValue!
-                                                              .value["Harga"] *
-                                                          int.parse(jumlahCtrl
-                                                              .text)) as int;
-                                                      setState(
-                                                        () {
-                                                          totalHarga += produkCtrl
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceEvenly,
+                                                  children: [
+                                                    ElevatedButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                      child: Text("Batal"),
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                              backgroundColor:
+                                                                  Colors.red,
+                                                              foregroundColor:
+                                                                  Colors.white),
+                                                    ),
+                                                    ElevatedButton(
+                                                      onPressed: () {
+                                                        if (formProduk
+                                                            .currentState!
+                                                            .validate()) {
+                                                          produkCtrl.dropDownValue!
+                                                                      .value[
+                                                                  "JumlahProduk"] =
+                                                              int.parse(
+                                                                  jumlahCtrl
+                                                                      .text);
+                                                          produkCtrl
                                                                   .dropDownValue!
                                                                   .value[
-                                                              "Subtotal"] as int;
-                                                          produkBeli.add(
-                                                              produkCtrl
-                                                                  .dropDownValue!
-                                                                  .value);
-                                                        },
-                                                      );
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    }
-                                                  },
-                                                  child: Text("Simpan"),
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                          backgroundColor:
-                                                              Color.fromARGB(
-                                                                  255,
-                                                                  20,
-                                                                  78,
-                                                                  253),
-                                                          foregroundColor:
-                                                              Colors.white),
+                                                              "Subtotal"] = (produkCtrl
+                                                                      .dropDownValue!
+                                                                      .value[
+                                                                  "Harga"] *
+                                                              int.parse(jumlahCtrl
+                                                                  .text)) as int;
+                                                          setState(
+                                                            () {
+                                                              totalHarga += produkCtrl
+                                                                      .dropDownValue!
+                                                                      .value[
+                                                                  "Subtotal"] as int;
+                                                              produkBeli.add(
+                                                                  produkCtrl
+                                                                      .dropDownValue!
+                                                                      .value);
+                                                            },
+                                                          );
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        }
+                                                      },
+                                                      child: Text("Simpan"),
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                              backgroundColor:
+                                                                  Color
+                                                                      .fromARGB(
+                                                                          255,
+                                                                          20,
+                                                                          78,
+                                                                          253),
+                                                              foregroundColor:
+                                                                  Colors.white),
+                                                    )
+                                                  ],
                                                 )
                                               ],
                                             ),
