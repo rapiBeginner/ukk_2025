@@ -124,7 +124,7 @@ class _ProdukindexState extends State<Produkindex> {
         padding: EdgeInsets.all(15),
         child: GridView.count(
           mainAxisSpacing: 10,
-          childAspectRatio: 2.8,
+          childAspectRatio: 2.6,
           crossAxisCount: 1,
           children: [
             ...List.generate(produk.length, (index) {

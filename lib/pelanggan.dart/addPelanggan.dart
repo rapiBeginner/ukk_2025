@@ -55,7 +55,7 @@ addPelanggan(BuildContext context) {
         return StatefulBuilder(builder: (context, setState) {
           return Dialog(
             child: Container(
-                height: MediaQuery.of(context).size.height / 1.7,
+                height: MediaQuery.of(context).size.height / 1.3,
                 width: MediaQuery.of(context).size.width / 1.3,
                 child: LayoutBuilder(builder: (context, constraint) {
                   return Padding(

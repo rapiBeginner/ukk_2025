@@ -27,7 +27,7 @@ class _UserindexState extends State<Userindex> {
   void initState() {
     super.initState();
     fetchUser();
-    print(widget.login);
+    // print(widget.login);
   }
 
   @override
@@ -51,7 +51,7 @@ class _UserindexState extends State<Userindex> {
               padding: EdgeInsets.all(15),
               child: GridView.count(
                 mainAxisSpacing: 10,
-                childAspectRatio: 2.8,
+                childAspectRatio: 2.6,
                 crossAxisCount: 1,
                 children: [
                   ...List.generate(user.length, (index) {

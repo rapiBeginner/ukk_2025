@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:raffi_ukk2025/drawer.dart';
-import 'package:raffi_ukk2025/pelanggan.dart/addPelanggan.dart';
 import 'package:raffi_ukk2025/penjualan/addPenjualan.dart';
+import 'package:raffi_ukk2025/penjualan/struk.dart';
 // import 'package:raffi_ukk2025/pelanggan.dart/deletePelanggan.dart';
 // import 'package:raffi_ukk2025/pelanggan.dart/editPelanggan.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -18,29 +18,31 @@ class Penjualanindex extends StatefulWidget {
 
 class _PenjualanindexState extends State<Penjualanindex> {
   List produk = [];
-  List pelanggan =[];
+  List pelanggan = [];
   // List filterProduk = [];
-  List penjualan=[];
+  List penjualan = [];
   var searcCtrl = TextEditingController();
   dynamic barTitle = Text(
     "Penjualan",
     style: GoogleFonts.raleway(),
   );
-  fetchProdukAndCustomer() async{
-    var produkResult= await Supabase.instance.client.from("produk").select().gt("Stok", 0);
-    var pelangganResult= await Supabase.instance.client.from("pelanggan").select();
-    produk=produkResult;
-    pelanggan=pelangganResult;
+  fetchCustomer() async {
+    var pelangganResult =
+        await Supabase.instance.client.from("pelanggan").select();
+    pelanggan = pelangganResult;
   }
 
   fetchPenjualan() async {
+    var produkResult =
+        await Supabase.instance.client.from("produk").select().gt("Stok", 0);
+    produk = produkResult;
     var result = await Supabase.instance.client
         .from('penjualan')
         .select("*, detailpenjualan(*, produk(*)), pelanggan(*)")
         .order("PenjualanID", ascending: true);
     setState(() {
       penjualan = result;
-      print(penjualan);
+    
       // filterProduk = produk;
     });
   }
@@ -49,7 +51,7 @@ class _PenjualanindexState extends State<Penjualanindex> {
   void initState() {
     super.initState();
     fetchPenjualan();
-    fetchProdukAndCustomer();
+    fetchCustomer();
   }
 
   @override
@@ -111,12 +113,12 @@ class _PenjualanindexState extends State<Penjualanindex> {
         //                               .startsWith(value.toLowerCase()) ||
         //                           item["Alamat"]
         //                               .toString()
-        //                               .toLowerCase()   
+        //                               .toLowerCase()
         //                               .startsWith(value.toLowerCase()) ||
         //                           item["NomorTelepon"]
         //                               .toString()
         //                               .toLowerCase()
-        //                               .startsWith(value.toLowerCase());  
+        //                               .startsWith(value.toLowerCase());
         //                     }).toList();
         //                   });
         //                 }else{
@@ -136,16 +138,17 @@ class _PenjualanindexState extends State<Penjualanindex> {
         padding: EdgeInsets.all(15),
         child: GridView.count(
           mainAxisSpacing: 10,
-          childAspectRatio: 2.8,
+          childAspectRatio: 2.6,
           crossAxisCount: 1,
           children: [
             ...List.generate(penjualan.length, (index) {
-              var penjualanList= penjualan[index];
-              var detailList= penjualan[index]["detailpenjualan"];
-              var pelangganList= penjualan[index]["pelanggan"];
+              var penjualanList = penjualan[index];
+              List detailList = penjualan[index]["detailpenjualan"];
+              var pelangganList = penjualan[index]["pelanggan"];
               // var produkList= penjualan[index]["detailpenjualan"]["produk"];
 
-              var tglPenjualan= DateFormat("dd MMMM yyyy").format(DateTime.parse(penjualanList["TanggalPenjualan"]));
+              var tglPenjualan = DateFormat("dd MMMM yyyy")
+                  .format(DateTime.parse(penjualanList["TanggalPenjualan"]));
               return Card(
                   elevation: 15,
                   child: LayoutBuilder(builder: (context, constraint) {
@@ -158,7 +161,9 @@ class _PenjualanindexState extends State<Penjualanindex> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                pelangganList["NamaPelanggan"],
+                                pelangganList == null
+                                    ? "Non member"
+                                    : pelangganList["NamaPelanggan"],
                                 style: GoogleFonts.raleway(
                                   fontSize: constraint.maxHeight / 5,
                                   fontWeight: FontWeight.bold,
@@ -174,52 +179,76 @@ class _PenjualanindexState extends State<Penjualanindex> {
                                 height: constraint.maxHeight / 12,
                               ),
                               Text("${penjualanList["TotalHarga"]}",
-                                      style: GoogleFonts.raleway(
-                                          fontSize: constraint.maxHeight / 8))
-                                
+                                  style: GoogleFonts.raleway(
+                                      fontSize: constraint.maxHeight / 8))
                             ],
                           ),
                           Spacer(),
-                          // Column(
-                          //   mainAxisAlignment: MainAxisAlignment.center,
-                          //   crossAxisAlignment: CrossAxisAlignment.end,
-                          //   children: [
-                          //     IconButton(
-                          //       onPressed: () async {
-                          //         var result = await editPelanggan(
-                          //             context,
-                          //             produks["NamaPelanggan"],
-                          //             produks["Alamat"],
-                          //             produks["NomorTelepon"],
-                          //             produks["PelangganID"]);
-                          //         if (result == true) {
-                          //           fetchPenjualan();
-                          //         }
-                          //       },
-                          //       icon: Icon(
-                          //         Icons.edit,
-                          //         color: Color.fromARGB(255, 20, 78, 253),
-                          //       ),
-                          //       iconSize: constraint.maxHeight / 4,
-                          //     ),
-                          //     IconButton(
-                          //       onPressed: () async {
-                          //         var result = await deletePelanggan(
-                          //             context,
-                          //             produks["PelangganID"],
-                          //             produks["NamaPelanggan"]);
-                          //         if (result == true) {
-                          //           fetchPenjualan();
-                          //         }
-                          //       },
-                          //       icon: Icon(
-                          //         Icons.delete,
-                          //         color: Color.fromARGB(255, 253, 20, 55),
-                          //       ),
-                          //       iconSize: constraint.maxHeight / 4,
-                          //     ),
-                          //   ],
-                          // )
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                  onPressed: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return Dialog(
+                                            child: Padding(
+                                              padding: EdgeInsets.all(15),
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    "Detail pembelian",
+                                                    style: GoogleFonts.raleway(
+                                                        fontSize: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width /
+                                                            20),
+                                                  ),
+                                                  SizedBox(
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            25,
+                                                  ),
+                                                  ...List.generate(
+                                                      detailList.length,
+                                                      (index) {
+                                                    return Row(
+                                                      children: [
+                                                        Text(
+                                                            "${detailList[index]["produk"]["NamaProduk"]} (${detailList[index]["JumlahProduk"]})"),
+                                                        Spacer(),
+                                                        Text(
+                                                            "Rp.${detailList[index]["Subtotal"]}")
+                                                      ],
+                                                    );
+                                                  })
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        });
+                                  },
+                                  icon: Icon(Icons.receipt_long)),
+                              IconButton(
+                                  onPressed: () {
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Struk(
+                                                login: widget.login,
+                                                penjualan: penjualanList)));
+                                  },
+                                  icon: Icon(Icons.print)),
+                            ],
+                          )
                         ],
                       ),
                     );

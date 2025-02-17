@@ -57,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ));
         usernameCtrl.clear();
         pwCtrl.clear();
-        print(result);
+        // print(result);
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
