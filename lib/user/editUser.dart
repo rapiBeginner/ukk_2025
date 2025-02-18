@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -7,6 +9,11 @@ editUser(BuildContext context, String username, String pw, int Id) {
   final usernameCtrl = TextEditingController(text: username);
   final pwCtrl = TextEditingController(text: pw);
   bool hidePw = true;
+
+  decodePw(String Password){
+    var bytes= Password.toString().codeUnits;
+    return utf8.decode(bytes);
+  }
 
   userEdit() async {
     if (formKey.currentState!.validate()) {

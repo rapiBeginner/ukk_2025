@@ -40,7 +40,7 @@ addUser(BuildContext context) {
         ));
       } else {
         var result = await Supabase.instance.client.from("User").insert([
-          {"Username": usernameCtrl.text, "Password": pwCtrl.text}
+          {"Username": usernameCtrl.text, "Password": encryptPassword(pwCtrl.text)}
         ]);
         if (result == null) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(

@@ -67,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
           .from("User")
           .select()
           .eq("Username", usernameCtrl.text)
-          .eq("Password", pwCtrl.text);
+          .eq("Password", encryptPassword(pwCtrl.text));
       if (result.isNotEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           duration: Duration(milliseconds: 1000),
@@ -244,8 +244,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               ),
                               ElevatedButton(
                                 onPressed: () {
-                                  // login();
-                                  print(encryptPassword(pwCtrl.text));
+                                  login();
+                                  // print(encryptPassword(pwCtrl.text));
                                 },
                                 style: ElevatedButton.styleFrom(
                                     fixedSize: Size(constraint.maxWidth / 2,

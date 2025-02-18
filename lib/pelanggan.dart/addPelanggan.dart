@@ -123,14 +123,14 @@ addPelanggan(BuildContext context) {
                             SizedBox(
                               height: constraint.maxHeight / 25,
                             ),
-                            DropDownTextField(dropDownList: [
-                              DropDownValueModel(
-                                  name: "Platinum", value: "platinum"),
-                              DropDownValueModel(
-                                  name: "Platinum", value: "platinum"),
-                              DropDownValueModel(
-                                  name: "Platinum", value: "platinum"),
-                            ]),
+                            // DropDownTextField(dropDownList: [
+                            //   DropDownValueModel(
+                            //       name: "Platinum", value: "platinum"),
+                            //   DropDownValueModel(
+                            //       name: "Platinum", value: "platinum"),
+                            //   DropDownValueModel(
+                            //       name: "Platinum", value: "platinum"),
+                            // ]),
                             SizedBox(
                               height: constraint.maxHeight / 20,
                             ),
