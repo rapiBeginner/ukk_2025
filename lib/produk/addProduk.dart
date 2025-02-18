@@ -130,7 +130,7 @@ addProduk(BuildContext context) {
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },
-                                  child: Text("Batal"),
+                                  child: Text("Batal", style: GoogleFonts.raleway()),
                                   style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.red,
                                       foregroundColor: Colors.white),
@@ -144,10 +144,6 @@ addProduk(BuildContext context) {
                                     style: GoogleFonts.raleway(),
                                   ),
                                   style: ElevatedButton.styleFrom(
-                                      fixedSize: Size(
-                                        constraint.maxWidth / 2,
-                                        constraint.maxHeight / 10,
-                                      ),
                                       backgroundColor:
                                           Color.fromARGB(255, 20, 78, 253),
                                       foregroundColor: Colors.white),

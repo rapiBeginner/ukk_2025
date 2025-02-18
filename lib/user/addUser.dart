@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -7,6 +10,18 @@ addUser(BuildContext context) {
   final usernameCtrl = TextEditingController();
   final pwCtrl = TextEditingController();
   bool hidePw = true;
+
+  String encryptPassword(String password) {
+    final bytes = utf8.encode(password);
+    final hash = sha256.convert(bytes);
+    return hash.toString();
+  }
+
+  // String decryptPassword(String password) {
+  //   final bytes = utf8.decode(password);
+  //   final hash = sha256.convert(bytes);
+  //   return hash.toString();
+  // }
 
   insertUser() async {
     if (formKey.currentState!.validate()) {
@@ -115,17 +130,16 @@ addUser(BuildContext context) {
                                   style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.red,
                                       foregroundColor: Colors.white),
-                                  child: Text("Batal"),
+                                  child: Text(
+                                    "Batal",
+                                    style: GoogleFonts.raleway(),
+                                  ),
                                 ),
                                 ElevatedButton(
                                   onPressed: () {
                                     insertUser();
                                   },
                                   style: ElevatedButton.styleFrom(
-                                      fixedSize: Size(
-                                        constraint.maxWidth / 2,
-                                        constraint.maxHeight / 10,
-                                      ),
                                       backgroundColor:
                                           Color.fromARGB(255, 20, 78, 253),
                                       foregroundColor: Colors.white),

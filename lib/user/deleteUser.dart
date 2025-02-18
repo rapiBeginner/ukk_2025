@@ -34,7 +34,7 @@ deleteUser(BuildContext context, int id, String username) {
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.red,
                             foregroundColor: Colors.white),
-                        child: Text("Batal"),
+                        child: Text("Batal", style: GoogleFonts.raleway(),),
                       ),
                       ElevatedButton(
                         onPressed: () async {
@@ -59,10 +59,7 @@ deleteUser(BuildContext context, int id, String username) {
                           style: GoogleFonts.raleway(),
                         ),
                         style: ElevatedButton.styleFrom(
-                            fixedSize: Size(
-                              constraint.maxWidth / 2,
-                              constraint.maxHeight / 10,
-                            ),
+                            
                             backgroundColor: Color.fromARGB(255, 20, 78, 253),
                             foregroundColor: Colors.white),
                       )

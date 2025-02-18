@@ -122,31 +122,33 @@ editProduk(BuildContext context, String nama, int harga, int stok, int Id) {
                             SizedBox(
                               height: constraint.maxHeight / 20,
                             ),
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text("Batal"),
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.red,
-                                  foregroundColor: Colors.white),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                produkEdit();
-                              },
-                              child: Text(
-                                "Simpan",
-                                style: GoogleFonts.raleway(),
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                  fixedSize: Size(
-                                    constraint.maxWidth / 2,
-                                    constraint.maxHeight / 10,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text("Batal",
+                                      style: GoogleFonts.raleway()),
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.red,
+                                      foregroundColor: Colors.white),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    produkEdit();
+                                  },
+                                  child: Text(
+                                    "Simpan",
+                                    style: GoogleFonts.raleway(),
                                   ),
-                                  backgroundColor:
-                                      Color.fromARGB(255, 20, 78, 253),
-                                  foregroundColor: Colors.white),
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor:
+                                          Color.fromARGB(255, 20, 78, 253),
+                                      foregroundColor: Colors.white),
+                                )
+                              ],
                             )
                           ],
                         )),

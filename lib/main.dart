@@ -1,11 +1,16 @@
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:raffi_ukk2025/dashboard.dart';
 import 'package:raffi_ukk2025/user/userIndex.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetBind = WidgetsFlutterBinding.ensureInitialized();
+  // FlutterNativeSplash.preserve(widgetsBinding: widgetBind);
   await Supabase.initialize(
       url: "https://ewuvaeitvhljewbodryx.supabase.co",
       anonKey:
@@ -40,6 +45,22 @@ class _MyHomePageState extends State<MyHomePage> {
   final pwCtrl = TextEditingController();
   var hidePw = true;
 
+  @override
+  void initState() {
+    super.initState();
+    splashScreen();
+  }
+  String encryptPassword(String password) {
+    final bytes = utf8.encode(password);
+    final hash = sha256.convert(bytes);
+    return hash.toString();
+  }
+
+  void splashScreen() async {
+    await Future.delayed(Duration(milliseconds: 100));
+    // FlutterNativeSplash.remove();
+  }
+
   void login() async {
     if (formKey.currentState!.validate()) {
       var result = await Supabase.instance.client
@@ -49,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
           .eq("Password", pwCtrl.text);
       if (result.isNotEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-           duration: Duration(milliseconds: 1000),
+          duration: Duration(milliseconds: 1000),
           content: Text(
             "Login berhasil",
             style: GoogleFonts.raleway(color: Colors.white),
@@ -62,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) =>Dashboard(
+                builder: (context) => Dashboard(
                       login: result,
                     )));
       } else {
@@ -223,7 +244,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               ),
                               ElevatedButton(
                                 onPressed: () {
-                                  login();
+                                  // login();
+                                  print(encryptPassword(pwCtrl.text));
                                 },
                                 style: ElevatedButton.styleFrom(
                                     fixedSize: Size(constraint.maxWidth / 2,

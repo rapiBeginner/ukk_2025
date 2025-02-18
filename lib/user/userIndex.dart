@@ -17,7 +17,10 @@ class Userindex extends StatefulWidget {
 class _UserindexState extends State<Userindex> {
   List user = [];
   fetchUser() async {
-    var result = await Supabase.instance.client.from('User').select().order("UserID", ascending: true);
+    var result = await Supabase.instance.client
+        .from('User')
+        .select()
+        .order("UserID", ascending: true);
     setState(() {
       user = result;
     });
@@ -33,7 +36,8 @@ class _UserindexState extends State<Userindex> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer:myDrawer(context,widget.login[0]["Username"], widget.login[0]["Role"], widget.login),
+      drawer: myDrawer(context, widget.login[0]["Username"],
+          widget.login[0]["Role"], widget.login),
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Color.fromARGB(255, 20, 78, 253),
@@ -63,24 +67,32 @@ class _UserindexState extends State<Userindex> {
                             padding: EdgeInsets.all(8),
                             child: Row(
                               children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      users["Username"],
-                                      style: GoogleFonts.raleway(
-                                        fontSize: constraint.maxHeight / 5,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: constraint.maxHeight / 8,
-                                    ),
-                                    Text(users["Role"],
+                                Container(
+                                  width: constraint.maxWidth / 1.5,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        users["Username"],
                                         style: GoogleFonts.raleway(
-                                            fontSize: constraint.maxHeight / 8))
-                                  ],
+                                          fontSize: constraint.maxHeight / 5,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      SizedBox(
+                                        height: constraint.maxHeight / 8,
+                                      ),
+                                      Text(
+                                        users["Role"],
+                                        style: GoogleFonts.raleway(
+                                            fontSize: constraint.maxHeight / 8),
+                                        overflow: TextOverflow.ellipsis,
+                                      )
+                                    ],
+                                  ),
                                 ),
                                 Spacer(),
                                 Column(
@@ -88,9 +100,13 @@ class _UserindexState extends State<Userindex> {
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     IconButton(
-                                      onPressed: ()async{
-                                        var result= await editUser(context, users["Username"], users["Password"], users["UserID"]);
-                                        if (result==true) {
+                                      onPressed: () async {
+                                        var result = await editUser(
+                                            context,
+                                            users["Username"],
+                                            users["Password"],
+                                            users["UserID"]);
+                                        if (result == true) {
                                           fetchUser();
                                         }
                                       },
@@ -104,11 +120,12 @@ class _UserindexState extends State<Userindex> {
                                     //   height: constraint.maxHeight / 10,
                                     // ),
                                     IconButton(
-                                      onPressed: () async{
-                                       var result= await  deleteUser(context, users["UserID"], users["Username"]);
-                                       if (result==true) {
-                                         fetchUser();
-                                       }
+                                      onPressed: () async {
+                                        var result = await deleteUser(context,
+                                            users["UserID"], users["Username"]);
+                                        if (result == true) {
+                                          fetchUser();
+                                        }
                                       },
                                       icon: Icon(
                                         Icons.delete,
@@ -129,7 +146,7 @@ class _UserindexState extends State<Userindex> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           var result = await addUser(context);
-          if (result==true) {
+          if (result == true) {
             fetchUser();
           }
         },
@@ -137,6 +154,7 @@ class _UserindexState extends State<Userindex> {
         backgroundColor: Color.fromARGB(255, 20, 78, 253),
         foregroundColor: Colors.white,
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
   }
 }

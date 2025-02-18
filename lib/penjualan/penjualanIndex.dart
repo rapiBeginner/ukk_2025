@@ -156,32 +156,42 @@ class _PenjualanindexState extends State<Penjualanindex> {
                       padding: EdgeInsets.all(8),
                       child: Row(
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                pelangganList == null
-                                    ? "Non member"
-                                    : pelangganList["NamaPelanggan"],
-                                style: GoogleFonts.raleway(
-                                  fontSize: constraint.maxHeight / 5,
-                                  fontWeight: FontWeight.bold,
+                          Container(
+                            width: constraint.maxWidth / 1.5,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  pelangganList == null
+                                      ? "Non member"
+                                      : pelangganList["NamaPelanggan"],
+                                  style: GoogleFonts.raleway(
+                                    fontSize: constraint.maxHeight / 5,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                              ),
-                              SizedBox(
-                                height: constraint.maxHeight / 8,
-                              ),
-                              Text(tglPenjualan,
+                                SizedBox(
+                                  height: constraint.maxHeight / 8,
+                                ),
+                                Text(
+                                  tglPenjualan,
                                   style: GoogleFonts.raleway(
-                                      fontSize: constraint.maxHeight / 8)),
-                              SizedBox(
-                                height: constraint.maxHeight / 12,
-                              ),
-                              Text("${penjualanList["TotalHarga"]}",
+                                      fontSize: constraint.maxHeight / 8),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                SizedBox(
+                                  height: constraint.maxHeight / 12,
+                                ),
+                                Text(
+                                  "${penjualanList["TotalHarga"]}",
                                   style: GoogleFonts.raleway(
-                                      fontSize: constraint.maxHeight / 8))
-                            ],
+                                      fontSize: constraint.maxHeight / 8),
+                                  overflow: TextOverflow.ellipsis,
+                                )
+                              ],
+                            ),
                           ),
                           Spacer(),
                           Column(
@@ -292,6 +302,7 @@ class _PenjualanindexState extends State<Penjualanindex> {
         backgroundColor: Color.fromARGB(255, 20, 78, 253),
         foregroundColor: Colors.white,
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
   }
 }

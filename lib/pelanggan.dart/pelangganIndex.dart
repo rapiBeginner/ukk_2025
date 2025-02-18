@@ -136,33 +136,37 @@ class _PelangganindexState extends State<Pelangganindex> {
                       padding: EdgeInsets.all(8),
                       child: Row(
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                produks["NamaPelanggan"],
-                                style: GoogleFonts.raleway(
-                                  fontSize: constraint.maxHeight / 5,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(
-                                height: constraint.maxHeight / 8,
-                              ),
-                              Text("${produks["Alamat"]}",
-                                  maxLines: 2,
+                          Container(
+                            width: constraint.maxWidth / 1.5,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
                                   overflow: TextOverflow.ellipsis,
+                                  produks["NamaPelanggan"],
                                   style: GoogleFonts.raleway(
-                                    fontSize: constraint.maxHeight / 8,
-                                  )),
-                              SizedBox(
-                                height: constraint.maxHeight / 12,
-                              ),
-                              Text("${produks["NomorTelepon"]}",
-                                  style: GoogleFonts.raleway(
-                                      fontSize: constraint.maxHeight / 8))
-                            ],
+                                    fontSize: constraint.maxHeight / 5,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: constraint.maxHeight / 8,
+                                ),
+                                Text("${produks["Alamat"]}",
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.raleway(
+                                      fontSize: constraint.maxHeight / 8,
+                                    )),
+                                SizedBox(
+                                  height: constraint.maxHeight / 12,
+                                ),
+                                Text("${produks["NomorTelepon"]}",
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.raleway(
+                                        fontSize: constraint.maxHeight / 8))
+                              ],
+                            ),
                           ),
                           Spacer(),
                           Column(
@@ -224,6 +228,7 @@ class _PelangganindexState extends State<Pelangganindex> {
         backgroundColor: Color.fromARGB(255, 20, 78, 253),
         foregroundColor: Colors.white,
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
   }
 }

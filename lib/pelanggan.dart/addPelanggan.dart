@@ -1,3 +1,4 @@
+import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -120,6 +121,17 @@ addPelanggan(BuildContext context) {
                                   border: OutlineInputBorder()),
                             ),
                             SizedBox(
+                              height: constraint.maxHeight / 25,
+                            ),
+                            DropDownTextField(dropDownList: [
+                              DropDownValueModel(
+                                  name: "Platinum", value: "platinum"),
+                              DropDownValueModel(
+                                  name: "Platinum", value: "platinum"),
+                              DropDownValueModel(
+                                  name: "Platinum", value: "platinum"),
+                            ]),
+                            SizedBox(
                               height: constraint.maxHeight / 20,
                             ),
                             Row(
@@ -129,7 +141,8 @@ addPelanggan(BuildContext context) {
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },
-                                  child: Text("Batal"),
+                                  child: Text("Batal",
+                                      style: GoogleFonts.raleway()),
                                   style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.red,
                                       foregroundColor: Colors.white),

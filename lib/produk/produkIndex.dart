@@ -66,7 +66,7 @@ class _ProdukindexState extends State<Produkindex> {
                               onPressed: () {
                                 setState(() {
                                   searcCtrl.clear();
-                                  produk=filterProduk;
+                                  produk = filterProduk;
                                   barTitle = Text(
                                     "Produk",
                                     style: GoogleFonts.raleway(),
@@ -99,17 +99,17 @@ class _ProdukindexState extends State<Produkindex> {
                                       .startsWith(value.toLowerCase()) ||
                                   item["Harga"]
                                       .toString()
-                                      .toLowerCase()   
+                                      .toLowerCase()
                                       .startsWith(value.toLowerCase()) ||
                                   item["Stok"]
                                       .toString()
                                       .toLowerCase()
-                                      .startsWith(value.toLowerCase());  
+                                      .startsWith(value.toLowerCase());
                             }).toList();
                           });
-                        }else{
+                        } else {
                           setState(() {
-                            produk=filterProduk;
+                            produk = filterProduk;
                           });
                         }
                       },
@@ -136,35 +136,48 @@ class _ProdukindexState extends State<Produkindex> {
                       padding: EdgeInsets.all(8),
                       child: Row(
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                produks["NamaProduk"],
-                                style: GoogleFonts.raleway(
-                                  fontSize: constraint.maxHeight / 5,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(
-                                height: constraint.maxHeight / 8,
-                              ),
-                              Text("Rp. ${produks["Harga"]}",
+                          Container(
+                            width: constraint.maxWidth / 1.5,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  produks["NamaProduk"],
                                   style: GoogleFonts.raleway(
-                                      fontSize: constraint.maxHeight / 8)),
-                              SizedBox(
-                                height: constraint.maxHeight / 12,
-                              ),
-                              produks["Stok"] != 0
-                                  ? Text("Sisa Stok ${produks["Stok"]}",
-                                      style: GoogleFonts.raleway(
-                                          fontSize: constraint.maxHeight / 8))
-                                  : Text("Habis",
-                                      style: GoogleFonts.raleway(
-                                          fontSize: constraint.maxHeight / 8,
-                                          color: Colors.red[600]))
-                            ],
+                                    fontSize: constraint.maxHeight / 5,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                SizedBox(
+                                  height: constraint.maxHeight / 8,
+                                ),
+                                Text(
+                                  "Rp. ${produks["Harga"]}",
+                                  style: GoogleFonts.raleway(
+                                      fontSize: constraint.maxHeight / 8),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                SizedBox(
+                                  height: constraint.maxHeight / 12,
+                                ),
+                                produks["Stok"] != 0
+                                    ? Text(
+                                        "Sisa Stok ${produks["Stok"]}",
+                                        style: GoogleFonts.raleway(
+                                            fontSize: constraint.maxHeight / 8),
+                                        overflow: TextOverflow.ellipsis,
+                                      )
+                                    : Text(
+                                        "Habis",
+                                        style: GoogleFonts.raleway(
+                                            fontSize: constraint.maxHeight / 8,
+                                            color: Colors.red[600]),
+                                        overflow: TextOverflow.ellipsis,
+                                      )
+                              ],
+                            ),
                           ),
                           Spacer(),
                           Column(
@@ -226,6 +239,7 @@ class _ProdukindexState extends State<Produkindex> {
         backgroundColor: Color.fromARGB(255, 20, 78, 253),
         foregroundColor: Colors.white,
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
   }
 }

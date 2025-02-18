@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:raffi_ukk2025/dashboard.dart';
 import 'package:raffi_ukk2025/main.dart';
 import 'package:raffi_ukk2025/pelanggan.dart/pelangganIndex.dart';
@@ -92,7 +93,7 @@ myDrawer(BuildContext context, String username, String role, List login) {
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
-                                child: Text("Batal"),
+                                child: Text("Batal", style: GoogleFonts.raleway(),),
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.red,
                                     foregroundColor: Colors.white),
@@ -104,7 +105,7 @@ myDrawer(BuildContext context, String username, String role, List login) {
                                       MaterialPageRoute(
                                           builder: (context) => MyHomePage()));
                                 },
-                                child: Text("Logout"),
+                                child: Text("Logout", style: GoogleFonts.raleway(),),
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor:
                                         Color.fromARGB(255, 20, 78, 253),

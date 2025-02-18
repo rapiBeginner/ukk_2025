@@ -18,7 +18,7 @@ addPenjualan(BuildContext context, List produk, List pelanggan) {
             Dialog(child: StatefulBuilder(builder: (context, setState) {
               return Container(
                 padding: EdgeInsets.all(15),
-                height: MediaQuery.of(context).size.height / 1.3,
+                height: MediaQuery.of(context).size.height / 1.2,
                 width: MediaQuery.of(context).size.width / 1.3,
                 child: LayoutBuilder(builder: (context, constraint) {
                   return Form(
@@ -86,8 +86,9 @@ addPenjualan(BuildContext context, List produk, List pelanggan) {
                                               onPressed: () {
                                                 setState(
                                                   () {
-                                                    totalHarga -= produkBeli[index]
-                                                        ["Subtotal"] as int;
+                                                    totalHarga -=
+                                                        produkBeli[index]
+                                                            ["Subtotal"] as int;
                                                     produkBeli.removeAt(index);
                                                   },
                                                 );
@@ -232,7 +233,9 @@ addPenjualan(BuildContext context, List produk, List pelanggan) {
                                                         Navigator.of(context)
                                                             .pop();
                                                       },
-                                                      child: Text("Batal"),
+                                                      child: Text("Batal",
+                                                          style: GoogleFonts
+                                                              .raleway()),
                                                       style: ElevatedButton
                                                           .styleFrom(
                                                               backgroundColor:
@@ -297,82 +300,105 @@ addPenjualan(BuildContext context, List produk, List pelanggan) {
                                         ));
                                       });
                                 },
-                                child: Text("Tambah produk"),
+                                child: Text("Tambah produk", style: GoogleFonts.raleway(),),
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor:
                                         Color.fromARGB(255, 20, 78, 253),
                                     foregroundColor: Colors.white))
                           ],
                         ),
+                        Spacer(),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text("Batal", style: GoogleFonts.raleway()),
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.red,
+                                      foregroundColor: Colors.white),
+                                ),
+                            ElevatedButton(
+                                onPressed: () async {
+                                  if (formPelanggan.currentState!.validate()) {
+                                    if (produkBeli.isEmpty) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        content: Text(
+                                          "Tambahkan data barang terlebih dahulu",
+                                          style: GoogleFonts.raleway(
+                                              color: Colors.white),
+                                        ),
+                                        backgroundColor: Colors.red,
+                                      ));
+                                    } else {
+                                      var penjualan = await Supabase.instance.client
+                                          .from("penjualan")
+                                          .insert([
+                                        {
+                                          "PelangganID":
+                                              pelangganCtrl.dropDownValue!.value,
+                                          "TotalHarga": totalHarga
+                                        }
+                                      ]).select();
+                            
+                                      List myDetail = [];
+                                      for (var i = 0; i < produkBeli.length; i++) {
+                                        myDetail.add({
+                                          "PenjualanID": penjualan[0]
+                                              ["PenjualanID"],
+                                          "ProdukID": produkBeli[i]["ProdukID"],
+                                          "JumlahProduk":
+                                              produkBeli[i]["JumlahProduk"] as int,
+                                          "Subtotal": produkBeli[i]["Subtotal"]
+                                        });
+                                      }
+                            
+                                      await Supabase.instance.client
+                                          .from("detailpenjualan")
+                                          .insert(myDetail);
+                            
+                                      for (var i = 0; i < produkBeli.length; i++) {
+                                        produkBeli[i]["Stok"] -=
+                                            produkBeli[i]["JumlahProduk"] as int;
+                                        produkBeli[i].remove("JumlahProduk");
+                                        produkBeli[i].remove("Subtotal");
+                                      }
+                            
+                                      await Supabase.instance.client
+                                          .from("produk")
+                                          .upsert(produkBeli);
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        content: Text(
+                                          "Pembayaran berhasil",
+                                          style: GoogleFonts.raleway(
+                                              color: Colors.white),
+                                        ),
+                                        backgroundColor: Colors.green,
+                                      ));
+                                      Navigator.of(context).pop(true);
+                                    }
+                                  }
+                                },
+                                child: Text(
+                                  "Bayar",
+                                  style: GoogleFonts.raleway(),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor:
+                                        Color.fromARGB(255, 20, 78, 253),
+                                    foregroundColor: Colors.white)),
+                          ],
+                        )
                       ],
                     ),
                   );
                 }),
               );
             })),
-            ElevatedButton(
-                onPressed: () async {
-                  if (formPelanggan.currentState!.validate()) {
-                    if (produkBeli.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(
-                          "Tambahkan data barang terlebih dahulu",
-                          style: GoogleFonts.raleway(color: Colors.white),
-                        ),
-                        backgroundColor: Colors.red,
-                      ));
-                    } else {
-                      var penjualan = await Supabase.instance.client
-                          .from("penjualan")
-                          .insert([
-                        {
-                          "PelangganID": pelangganCtrl.dropDownValue!.value,
-                          "TotalHarga": totalHarga
-                        }
-                      ]).select();
-
-                      List myDetail = [];
-                      for (var i = 0; i < produkBeli.length; i++) {
-                        myDetail.add({
-                          "PenjualanID": penjualan[0]["PenjualanID"],
-                          "ProdukID": produkBeli[i]["ProdukID"],
-                          "JumlahProduk": produkBeli[i]["JumlahProduk"] as int,
-                          "Subtotal": produkBeli[i]["Subtotal"]
-                        });
-                      }
-
-                      await Supabase.instance.client
-                          .from("detailpenjualan")
-                          .insert(myDetail);
-
-                      for (var i = 0; i < produkBeli.length; i++) {
-                        produkBeli[i]["Stok"] -=
-                            produkBeli[i]["JumlahProduk"] as int;
-                        produkBeli[i].remove("JumlahProduk");
-                        produkBeli[i].remove("Subtotal");
-                      }
-
-                      await Supabase.instance.client
-                          .from("produk")
-                          .upsert(produkBeli);
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(
-                          "Pembayaran berhasil",
-                          style: GoogleFonts.raleway(color: Colors.white),
-                        ),
-                        backgroundColor: Colors.green,
-                      ));
-                      Navigator.of(context).pop(true);
-                    }
-                  }
-                },
-                child: Text(
-                  "Bayar",
-                  style: GoogleFonts.raleway(),
-                ),
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 20, 78, 253),
-                    foregroundColor: Colors.white))
           ],
         );
       });
