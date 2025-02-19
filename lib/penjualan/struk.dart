@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pdfWidget;
 import 'package:printing/printing.dart';
+import 'package:raffi_ukk2025/decimal.dart';
 import 'package:raffi_ukk2025/drawer.dart';
 
 class Struk extends StatefulWidget {
@@ -25,6 +26,18 @@ class _StrukState extends State<Struk> {
   Widget build(BuildContext context) {
     Map penjualan = widget.penjualan;
     List detail = widget.penjualan["detailpenjualan"];
+    var pelanggan = widget.penjualan["pelanggan"];
+    String diskon = "";
+    if (pelanggan?["Membership"] == "platinum") {
+      diskon = "10%";
+    } else if (pelanggan?["Membership"] == "gold") {
+      diskon = "5%";
+    } else if (pelanggan?["Membership"] == "silver") {
+      diskon = "2%";
+    } else {
+      diskon = "";
+    }
+
     return Scaffold(
       drawer: myDrawer(context, widget.login[0]["Username"],
           widget.login[0]["Role"], widget.login),
@@ -53,13 +66,11 @@ class _StrukState extends State<Struk> {
                   mainAxisAlignment: pdfWidget.MainAxisAlignment.spaceBetween,
                   children: [
                     pdfWidget.Row(
-                        mainAxisAlignment:
-                            pdfWidget.MainAxisAlignment.center,
+                        mainAxisAlignment: pdfWidget.MainAxisAlignment.center,
                         children: [
                           pdfWidget.Text("SienceStore",
                               style: pdfWidget.TextStyle(
                                   font: titleFont, fontSize: 50)),
-                        
                         ]),
                     pdfWidget.Container(
                         padding: pdfWidget.EdgeInsets.only(top: 20, bottom: 20),
@@ -86,17 +97,32 @@ class _StrukState extends State<Struk> {
                                           font: font, fontSize: 25)),
                                   pdfWidget.Spacer(),
                                   pdfWidget.Text(
-                                      "Rp.${detail[index]["Subtotal"]}",
+                                      "Rp.${decimal(detail[index]["Subtotal"].toString())}",
                                       style: pdfWidget.TextStyle(
                                           font: font, fontSize: 25)),
                                 ]);
                               }),
+                              pdfWidget.SizedBox(height: 50),
+                              diskon.isEmpty
+                                  ? pdfWidget.SizedBox()
+                                  : pdfWidget.Row(children: [
+                                      pdfWidget.Text("Diskon",
+                                          style: pdfWidget.TextStyle(
+                                              font: fontBold, fontSize: 25)),
+                                      pdfWidget.Spacer(),
+                                      pdfWidget.Text(
+                                          "Rp.${diskon}",
+                                          style: pdfWidget.TextStyle(
+                                              font: fontBold, fontSize: 25)),
+                                    ]),
+                              pdfWidget.SizedBox(height: 50),
                               pdfWidget.Row(children: [
                                 pdfWidget.Text("Total",
                                     style: pdfWidget.TextStyle(
                                         font: fontBold, fontSize: 25)),
                                 pdfWidget.Spacer(),
-                                pdfWidget.Text("Rp.${penjualan["TotalHarga"]}",
+                                pdfWidget.Text(
+                                    "Rp.${decimal(penjualan["TotalHarga"].toString())}",
                                     style: pdfWidget.TextStyle(
                                         font: fontBold, fontSize: 25)),
                               ])
@@ -106,7 +132,9 @@ class _StrukState extends State<Struk> {
                         children: [
                           pdfWidget.Text(
                               "SienceStore\nJl.Lolaras no.7, Malang, Jawa Timur",
-                              textAlign: pdfWidget.TextAlign.center, style: pdfWidget.TextStyle(font: font, fontSize: 15))
+                              textAlign: pdfWidget.TextAlign.center,
+                              style:
+                                  pdfWidget.TextStyle(font: font, fontSize: 15))
                         ])
                   ]);
             }));

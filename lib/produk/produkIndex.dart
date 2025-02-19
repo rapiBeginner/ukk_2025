@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:raffi_ukk2025/decimal.dart';
 import 'package:raffi_ukk2025/drawer.dart';
 import 'package:raffi_ukk2025/produk/addProduk.dart';
 import 'package:raffi_ukk2025/produk/deleteProduk.dart';
@@ -154,7 +155,7 @@ class _ProdukindexState extends State<Produkindex> {
                                   height: constraint.maxHeight / 8,
                                 ),
                                 Text(
-                                  "Rp. ${produks["Harga"]}",
+                                  "Rp. ${decimal(produks["Harga"].toString())}",
                                   style: GoogleFonts.raleway(
                                       fontSize: constraint.maxHeight / 8),
                                   overflow: TextOverflow.ellipsis,

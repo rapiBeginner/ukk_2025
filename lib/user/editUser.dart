@@ -5,15 +5,17 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 editUser(BuildContext context, String username, String pw, int Id) {
+  String encryptPassword(String password) {
+    return base64Encode(utf8.encode(password));
+  }
+
+  String decryptPassword(String password) {
+    return utf8.decode(base64Decode(password));
+  }
   final formKey = GlobalKey<FormState>();
   final usernameCtrl = TextEditingController(text: username);
-  final pwCtrl = TextEditingController(text: pw);
+  final pwCtrl = TextEditingController(text: decryptPassword(pw));
   bool hidePw = true;
-
-  decodePw(String Password){
-    var bytes= Password.toString().codeUnits;
-    return utf8.decode(bytes);
-  }
 
   userEdit() async {
     if (formKey.currentState!.validate()) {
@@ -34,7 +36,7 @@ editUser(BuildContext context, String username, String pw, int Id) {
       } else {
         var result = await Supabase.instance.client.from("User").update({
           "Username": usernameCtrl.text,
-          "Password": pwCtrl.text
+          "Password": encryptPassword(pwCtrl.text)
         }).eq("UserID", Id);
         if (result == null) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -124,7 +126,10 @@ editUser(BuildContext context, String username, String pw, int Id) {
                                   style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.red,
                                       foregroundColor: Colors.white),
-                                  child: Text("Batal", style: GoogleFonts.raleway(),),
+                                  child: Text(
+                                    "Batal",
+                                    style: GoogleFonts.raleway(),
+                                  ),
                                 ),
                                 ElevatedButton(
                                   onPressed: () {
@@ -135,7 +140,6 @@ editUser(BuildContext context, String username, String pw, int Id) {
                                     style: GoogleFonts.raleway(),
                                   ),
                                   style: ElevatedButton.styleFrom(
-                                      
                                       backgroundColor:
                                           Color.fromARGB(255, 20, 78, 253),
                                       foregroundColor: Colors.white),

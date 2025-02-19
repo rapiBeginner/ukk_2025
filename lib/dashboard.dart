@@ -14,6 +14,7 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   List<_ChartData> data = [];
+  List pelanggan = [];
   List produkHabis = [];
   List<Map> produk = [];
   int totalPendapatan = 0;
@@ -29,29 +30,18 @@ class _DashboardState extends State<Dashboard> {
       produkHabis = produk.where((item) => item["Stok"] == 0).toList();
     });
 
-    var result2 = await Supabase.instance.client
-        .from("penjualan")
-        .select("*,detailpenjualan(*, produk(*))")
-        .eq("TanggalPenjualan",
-            DateFormat("yyyy-MM-dd").format(DateTime.now()));
+    // var result2 = await Supabase.instance.client
+    //     .from("penjualan")
+    //     .select("*,detailpenjualan(*, produk(*))")
+    //     .eq("TanggalPenjualan",
+    //         DateFormat("yyyy-MM-dd").format(DateTime.now()));
+    // setState(() {
+    //   penjualan = result2;
+    //   print(produkHariIni);
+    // });
+    var result3 = await Supabase.instance.client.from("pelanggan").select();
     setState(() {
-      penjualan = result2;
-      // for (var i = 0; i < penjualan.length; i++) {
-      //   List detailPenjualan=penjualan[i]["detailpenjualan"];
-      //   for (var i = 0; i < detailPenjualan.length; i++) {
-      //    List produkDetail= detailPenjualan[i]["produk"];
-      //    for (var i = 0; i < produkDetail.length; i++) {
-      //       var check=produkHariIni.where((item)=>item==produkDetail[i][""]);
-      //     if (check.isEmpty) {
-      //       produkHariIni.add({
-      //         "ProdukID":detailPenjualan[i]["produk"]["ProdukID"],
-      //         "NamaProduk":detailPenjualan[i]["produk"]["NamaProduk"]
-      //       });
-      //     }
-      //    }
-      //   }
-      // }
-      print(produkHariIni);
+      pelanggan=result3;
     });
   }
 
@@ -70,17 +60,32 @@ class _DashboardState extends State<Dashboard> {
   @override
   void initState() {
     super.initState();
-    data = [
-      _ChartData("Rafi", 2),
-      _ChartData("irfan", 5),
-    ];
     fetchProduk();
     fetchTodaySales();
   }
 
   @override
   Widget build(BuildContext context) {
-    // print(produk);
+    data = [
+      _ChartData(
+          "Platinum",
+          pelanggan
+              .where((item) => item["Membership"] == "platinum")
+              .length
+              .toDouble()),
+      _ChartData(
+          "Gold",
+          pelanggan
+              .where((item) => item["Membership"] == "gold")
+              .length
+              .toDouble()),
+      _ChartData(
+          "Silver",
+          pelanggan
+              .where((item) => item["Membership"] == "silver")
+              .length
+              .toDouble()),
+    ];
     return Scaffold(
       drawer: myDrawer(context, widget.login[0]["Username"],
           widget.login[0]["Role"], widget.login),

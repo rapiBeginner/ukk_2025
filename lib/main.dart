@@ -40,6 +40,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  
   final formKey = GlobalKey<FormState>();
   final usernameCtrl = TextEditingController();
   final pwCtrl = TextEditingController();
@@ -51,9 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
     splashScreen();
   }
   String encryptPassword(String password) {
-    final bytes = utf8.encode(password);
-    final hash = sha256.convert(bytes);
-    return hash.toString();
+    return base64Encode(utf8.encode(password));
   }
 
   void splashScreen() async {

@@ -2,13 +2,17 @@ import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:raffi_ukk2025/decimal.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 addPenjualan(BuildContext context, List produk, List pelanggan) {
+  bool pelangganEnable = false;
   final formPelanggan = GlobalKey<FormState>();
   final pelangganCtrl = SingleValueDropDownController();
   List<Map<String, dynamic>> produkBeli = [];
   int totalHarga = 0;
+  int totalHarga2 = 0;
+  String diskon = "";
   return showDialog(
       context: context,
       builder: (context) {
@@ -35,15 +39,59 @@ addPenjualan(BuildContext context, List produk, List pelanggan) {
                           height: constraint.maxHeight / 25,
                         ),
                         DropDownTextField(
+                          isEnabled: produkBeli.isEmpty ? false : true,
+                          onChanged: (value) {
+                            print(value);
+                            if (pelangganCtrl
+                                    .dropDownValue!.value["Membership"] !=
+                                null) {
+                              String member = pelangganCtrl
+                                  .dropDownValue!.value["Membership"];
+                              if (member == "platinum") {
+                                setState(
+                                  () {
+                                    totalHarga = totalHarga2 -
+                                        (totalHarga2 * 10 / 100) as int;
+                                    diskon = "10%";
+                                  },
+                                );
+                              } else if (member == "gold") {
+                                setState(
+                                  () {
+                                    totalHarga = totalHarga2 -
+                                        (totalHarga2 * 5 / 100) as int;
+                                    diskon = "5%";
+                                  },
+                                );
+                              } else if (member == "silver") {
+                                setState(
+                                  () {
+                                    totalHarga = totalHarga2 -
+                                        (totalHarga2 * 2 / 100) as int;
+                                    diskon = "2%";
+                                  },
+                                );
+                              }
+                            } else {
+                              setState(
+                                () {
+                                  totalHarga = totalHarga2;
+                                  diskon = "";
+                                },
+                              );
+                            }
+                          },
                           enableSearch: true,
                           controller: pelangganCtrl,
                           dropDownList: [
-                            DropDownValueModel(name: "Non member", value: null),
+                            DropDownValueModel(
+                                name: "Non member",
+                                value: {"PelangganID": null}),
                             ...List.generate(pelanggan.length, (index) {
                               return DropDownValueModel(
                                   name:
-                                      "${pelanggan[index]["NamaPelanggan"]}/${pelanggan[index]["NomorTelepon"]}",
-                                  value: pelanggan[index]["PelangganID"]);
+                                      "${pelanggan[index]["NamaPelanggan"]} (${pelanggan[index]["Membership"]})",
+                                  value: pelanggan[index]);
                             }),
                           ],
                           textFieldDecoration: InputDecoration(
@@ -81,7 +129,7 @@ addPenjualan(BuildContext context, List produk, List pelanggan) {
                                           title: Text(
                                               "${produkBeli[index]["NamaProduk"]} (${produkBeli[index]["JumlahProduk"]})"),
                                           subtitle: Text(
-                                              "Rp.${produkBeli[index]["Subtotal"].toString()}"),
+                                              "Rp.${decimal(produkBeli[index]["Subtotal"].toString())}"),
                                           trailing: IconButton(
                                               onPressed: () {
                                                 setState(
@@ -89,6 +137,7 @@ addPenjualan(BuildContext context, List produk, List pelanggan) {
                                                     totalHarga -=
                                                         produkBeli[index]
                                                             ["Subtotal"] as int;
+                                                    totalHarga2 = totalHarga;
                                                     produkBeli.removeAt(index);
                                                   },
                                                 );
@@ -106,7 +155,11 @@ addPenjualan(BuildContext context, List produk, List pelanggan) {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Text("Total harga:Rp.${totalHarga.toString()}"),
+                            diskon.isEmpty
+                                ? Text(
+                                    "Total harga:Rp.${decimal(totalHarga.toString())}")
+                                : Text(
+                                    "Total harga:Rp.${decimal(totalHarga.toString())} (diskon:$diskon)"),
                           ],
                         ),
                         SizedBox(
@@ -269,6 +322,8 @@ addPenjualan(BuildContext context, List produk, List pelanggan) {
                                                                       .dropDownValue!
                                                                       .value[
                                                                   "Subtotal"] as int;
+                                                              totalHarga2 =
+                                                                  totalHarga;
                                                               produkBeli.add(
                                                                   produkCtrl
                                                                       .dropDownValue!
@@ -300,7 +355,10 @@ addPenjualan(BuildContext context, List produk, List pelanggan) {
                                         ));
                                       });
                                 },
-                                child: Text("Tambah produk", style: GoogleFonts.raleway(),),
+                                child: Text(
+                                  "Tambah produk",
+                                  style: GoogleFonts.raleway(),
+                                ),
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor:
                                         Color.fromARGB(255, 20, 78, 253),
@@ -312,14 +370,15 @@ addPenjualan(BuildContext context, List produk, List pelanggan) {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Text("Batal", style: GoogleFonts.raleway()),
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.red,
-                                      foregroundColor: Colors.white),
-                                ),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child:
+                                  Text("Batal", style: GoogleFonts.raleway()),
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.red,
+                                  foregroundColor: Colors.white),
+                            ),
                             ElevatedButton(
                                 onPressed: () async {
                                   if (formPelanggan.currentState!.validate()) {
@@ -334,39 +393,45 @@ addPenjualan(BuildContext context, List produk, List pelanggan) {
                                         backgroundColor: Colors.red,
                                       ));
                                     } else {
-                                      var penjualan = await Supabase.instance.client
+                                      var penjualan = await Supabase
+                                          .instance.client
                                           .from("penjualan")
                                           .insert([
                                         {
-                                          "PelangganID":
-                                              pelangganCtrl.dropDownValue!.value,
+                                          "PelangganID": pelangganCtrl
+                                              .dropDownValue!
+                                              .value["PelangganID"],
                                           "TotalHarga": totalHarga
                                         }
                                       ]).select();
-                            
+
                                       List myDetail = [];
-                                      for (var i = 0; i < produkBeli.length; i++) {
+                                      for (var i = 0;
+                                          i < produkBeli.length;
+                                          i++) {
                                         myDetail.add({
                                           "PenjualanID": penjualan[0]
                                               ["PenjualanID"],
                                           "ProdukID": produkBeli[i]["ProdukID"],
-                                          "JumlahProduk":
-                                              produkBeli[i]["JumlahProduk"] as int,
+                                          "JumlahProduk": produkBeli[i]
+                                              ["JumlahProduk"] as int,
                                           "Subtotal": produkBeli[i]["Subtotal"]
                                         });
                                       }
-                            
+
                                       await Supabase.instance.client
                                           .from("detailpenjualan")
                                           .insert(myDetail);
-                            
-                                      for (var i = 0; i < produkBeli.length; i++) {
-                                        produkBeli[i]["Stok"] -=
-                                            produkBeli[i]["JumlahProduk"] as int;
+
+                                      for (var i = 0;
+                                          i < produkBeli.length;
+                                          i++) {
+                                        produkBeli[i]["Stok"] -= produkBeli[i]
+                                            ["JumlahProduk"] as int;
                                         produkBeli[i].remove("JumlahProduk");
                                         produkBeli[i].remove("Subtotal");
                                       }
-                            
+
                                       await Supabase.instance.client
                                           .from("produk")
                                           .upsert(produkBeli);

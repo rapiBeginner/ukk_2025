@@ -124,7 +124,7 @@ class _PelangganindexState extends State<Pelangganindex> {
         padding: EdgeInsets.all(15),
         child: GridView.count(
           mainAxisSpacing: 10,
-          childAspectRatio: 2.6,
+          childAspectRatio: 2,
           crossAxisCount: 1,
           children: [
             ...List.generate(produk.length, (index) {
@@ -146,25 +146,32 @@ class _PelangganindexState extends State<Pelangganindex> {
                                   overflow: TextOverflow.ellipsis,
                                   produks["NamaPelanggan"],
                                   style: GoogleFonts.raleway(
-                                    fontSize: constraint.maxHeight / 5,
+                                    fontSize: constraint.maxHeight / 7,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                                 SizedBox(
-                                  height: constraint.maxHeight / 8,
+                                  height: constraint.maxHeight / 12,
                                 ),
                                 Text("${produks["Alamat"]}",
                                     overflow: TextOverflow.ellipsis,
                                     style: GoogleFonts.raleway(
-                                      fontSize: constraint.maxHeight / 8,
+                                      fontSize: constraint.maxHeight / 10,
                                     )),
                                 SizedBox(
-                                  height: constraint.maxHeight / 12,
+                                  height: constraint.maxHeight / 16,
                                 ),
                                 Text("${produks["NomorTelepon"]}",
                                     overflow: TextOverflow.ellipsis,
                                     style: GoogleFonts.raleway(
-                                        fontSize: constraint.maxHeight / 8))
+                                        fontSize: constraint.maxHeight / 10)),
+                                SizedBox(
+                                  height: constraint.maxHeight / 16,
+                                ),
+                                Text("${produks["Membership"]}",
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.raleway(
+                                        fontSize: constraint.maxHeight / 10))
                               ],
                             ),
                           ),
@@ -180,6 +187,7 @@ class _PelangganindexState extends State<Pelangganindex> {
                                       produks["NamaPelanggan"],
                                       produks["Alamat"],
                                       produks["NomorTelepon"],
+                                      produks["Membership"],
                                       produks["PelangganID"]);
                                   if (result == true) {
                                     fetchPelanggan();

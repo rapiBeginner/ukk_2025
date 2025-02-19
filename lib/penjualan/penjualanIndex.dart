@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:raffi_ukk2025/decimal.dart';
 import 'package:raffi_ukk2025/drawer.dart';
 import 'package:raffi_ukk2025/penjualan/addPenjualan.dart';
 import 'package:raffi_ukk2025/penjualan/struk.dart';
@@ -145,7 +146,17 @@ class _PenjualanindexState extends State<Penjualanindex> {
               var penjualanList = penjualan[index];
               List detailList = penjualan[index]["detailpenjualan"];
               var pelangganList = penjualan[index]["pelanggan"];
-              // var produkList= penjualan[index]["detailpenjualan"]["produk"];
+              String diskon = "";
+              if (pelangganList?["Membership"] == "platinum") {
+                diskon = "10%";
+              } else if (pelangganList?["Membership"] == "gold") {
+                diskon = "5%";
+              } else if (pelangganList?["Membership"] == "silver") {
+                diskon = "2%";
+              } else {
+                diskon = "";
+              }
+              // var produkList = penjualan[index]["detailpenjualan"]["produk"];
 
               var tglPenjualan = DateFormat("dd MMMM yyyy")
                   .format(DateTime.parse(penjualanList["TanggalPenjualan"]));
@@ -185,7 +196,7 @@ class _PenjualanindexState extends State<Penjualanindex> {
                                   height: constraint.maxHeight / 12,
                                 ),
                                 Text(
-                                  "${penjualanList["TotalHarga"]}",
+                                  "${decimal(penjualanList["TotalHarga"].toString())}",
                                   style: GoogleFonts.raleway(
                                       fontSize: constraint.maxHeight / 8),
                                   overflow: TextOverflow.ellipsis,
@@ -236,10 +247,18 @@ class _PenjualanindexState extends State<Penjualanindex> {
                                                             "${detailList[index]["produk"]["NamaProduk"]} (${detailList[index]["JumlahProduk"]})"),
                                                         Spacer(),
                                                         Text(
-                                                            "Rp.${detailList[index]["Subtotal"]}")
+                                                            "Rp.${decimal(detailList[index]["Subtotal"].toString())}")
                                                       ],
                                                     );
                                                   }),
+                                                  
+                                                  diskon.isEmpty?SizedBox():Row(
+                                                    children: [
+                                                      Text("Diskon"),
+                                                      Spacer(),
+                                                      Text("$diskon")
+                                                    ],
+                                                  ),
                                                   SizedBox(
                                                     height:
                                                         MediaQuery.of(context)

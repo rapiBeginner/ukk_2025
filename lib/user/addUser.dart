@@ -12,16 +12,10 @@ addUser(BuildContext context) {
   bool hidePw = true;
 
   String encryptPassword(String password) {
-    final bytes = utf8.encode(password);
-    final hash = sha256.convert(bytes);
-    return hash.toString();
+    return base64Encode(utf8.encode(password));
   }
 
-  // String decryptPassword(String password) {
-  //   final bytes = utf8.decode(password);
-  //   final hash = sha256.convert(bytes);
-  //   return hash.toString();
-  // }
+
 
   insertUser() async {
     if (formKey.currentState!.validate()) {

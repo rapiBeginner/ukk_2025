@@ -9,6 +9,8 @@ addPelanggan(BuildContext context) {
   final namaCtrl = TextEditingController();
   final alamatCtrl = TextEditingController();
   final noTelpCtrl = TextEditingController();
+  final memberCtrl = SingleValueDropDownController(
+      data: DropDownValueModel(name: "silver", value: "silver"));
 
   pelangganAdd() async {
     if (formKey.currentState!.validate()) {
@@ -32,7 +34,8 @@ addPelanggan(BuildContext context) {
           {
             "NamaPelanggan": namaCtrl.text,
             "Alamat": alamatCtrl.text,
-            "NomorTelepon": noTelpCtrl.text
+            "NomorTelepon": noTelpCtrl.text,
+            "Membership": memberCtrl.dropDownValue!.value
           }
         ]);
         if (result == null) {
@@ -56,7 +59,7 @@ addPelanggan(BuildContext context) {
         return StatefulBuilder(builder: (context, setState) {
           return Dialog(
             child: Container(
-                height: MediaQuery.of(context).size.height / 1.6,
+                height: MediaQuery.of(context).size.height / 1.2,
                 width: MediaQuery.of(context).size.width / 1.3,
                 child: LayoutBuilder(builder: (context, constraint) {
                   return Padding(
@@ -111,8 +114,11 @@ addPelanggan(BuildContext context) {
                                 FilteringTextInputFormatter.digitsOnly
                               ],
                               validator: (value) {
+                                var regex = RegExp(r'^08\d*$');
                                 if (value == null || value.isEmpty) {
                                   return "Nomor telepon tidak boleh kosong";
+                                } else if (!regex.hasMatch(value)) {
+                                  return "nomor telepon diawali 08";
                                 }
                                 return null;
                               },
@@ -123,14 +129,20 @@ addPelanggan(BuildContext context) {
                             SizedBox(
                               height: constraint.maxHeight / 25,
                             ),
-                            // DropDownTextField(dropDownList: [
-                            //   DropDownValueModel(
-                            //       name: "Platinum", value: "platinum"),
-                            //   DropDownValueModel(
-                            //       name: "Platinum", value: "platinum"),
-                            //   DropDownValueModel(
-                            //       name: "Platinum", value: "platinum"),
-                            // ]),
+                            DropDownTextField(
+                                textFieldDecoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    labelText: "Pilih paket membership",
+                                    labelStyle: GoogleFonts.raleway()),
+                                controller: memberCtrl,
+                                dropDownList: [
+                                  DropDownValueModel(
+                                      name: "silver", value: "silver"),
+                                  DropDownValueModel(
+                                      name: "gold", value: "gold"),
+                                  DropDownValueModel(
+                                      name: "platinum", value: "platinum"),
+                                ]),
                             SizedBox(
                               height: constraint.maxHeight / 20,
                             ),
