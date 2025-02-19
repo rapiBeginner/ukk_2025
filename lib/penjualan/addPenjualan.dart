@@ -5,9 +5,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:raffi_ukk2025/decimal.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-addPenjualan(BuildContext context, List produk, List pelanggan) {
-  bool pelangganEnable = false;
+addPenjualan(BuildContext context, List<Map> produk, List pelanggan) {
   final formPelanggan = GlobalKey<FormState>();
+  List<Map> produk2 = produk;
   final pelangganCtrl = SingleValueDropDownController();
   List<Map<String, dynamic>> produkBeli = [];
   int totalHarga = 0;
@@ -41,7 +41,6 @@ addPenjualan(BuildContext context, List produk, List pelanggan) {
                         DropDownTextField(
                           isEnabled: produkBeli.isEmpty ? false : true,
                           onChanged: (value) {
-                            print(value);
                             if (pelangganCtrl
                                     .dropDownValue!.value["Membership"] !=
                                 null) {
@@ -137,8 +136,20 @@ addPenjualan(BuildContext context, List produk, List pelanggan) {
                                                     totalHarga -=
                                                         produkBeli[index]
                                                             ["Subtotal"] as int;
-                                                    totalHarga2 = totalHarga;
+                                                    // totalHarga2 = totalHarga;
                                                     produkBeli.removeAt(index);
+                                                    if (produkBeli.isEmpty) {
+                                                      setState(
+                                                        () {
+                                                          totalHarga = 0;
+                                                          totalHarga2 =
+                                                              totalHarga;
+                                                          diskon = "";
+                                                        },
+                                                      );
+                                                      pelangganCtrl
+                                                          .clearDropDown();
+                                                    }
                                                   },
                                                 );
                                               },
@@ -172,6 +183,21 @@ addPenjualan(BuildContext context, List produk, List pelanggan) {
                                 onPressed: () {
                                   // produk.removeWhere(test)
                                   // produk=produk.where((item)=>item["ProdukID"]).toList();
+                                  if (produkBeli.isNotEmpty) {
+                                    List idProduk = [];
+                                    for (var i = 0;
+                                        i < produkBeli.length;
+                                        i++) {
+                                      idProduk.add(produkBeli[i]["ProdukID"]);
+                                    }
+                                    produk = produk2
+                                        .where((item) =>
+                                            !idProduk.contains(item["ProdukID"]))
+                                        .toList();
+                                  }
+                                  else{
+                                    produk=produk2;
+                                  }
                                   final jumlahCtrl = TextEditingController();
                                   final produkCtrl =
                                       SingleValueDropDownController();

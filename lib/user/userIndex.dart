@@ -30,7 +30,6 @@ class _UserindexState extends State<Userindex> {
   void initState() {
     super.initState();
     fetchUser();
-    // print(widget.login);
   }
 
   @override

@@ -37,7 +37,6 @@ class _PelangganindexState extends State<Pelangganindex> {
   void initState() {
     super.initState();
     fetchPelanggan();
-    // print(widget.login);
   }
 
   @override

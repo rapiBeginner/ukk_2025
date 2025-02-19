@@ -38,7 +38,6 @@ class _ProdukindexState extends State<Produkindex> {
   void initState() {
     super.initState();
     fetchProduk();
-    // print(widget.login);
   }
 
   @override

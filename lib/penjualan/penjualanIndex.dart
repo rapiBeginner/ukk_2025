@@ -18,7 +18,7 @@ class Penjualanindex extends StatefulWidget {
 }
 
 class _PenjualanindexState extends State<Penjualanindex> {
-  List produk = [];
+  List<Map> produk = [];
   List pelanggan = [];
   // List filterProduk = [];
   List penjualan = [];

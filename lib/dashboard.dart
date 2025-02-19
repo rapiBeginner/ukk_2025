@@ -40,15 +40,6 @@ class _DashboardState extends State<Dashboard> {
       produkHabis = produk.where((item) => item["Stok"] == 0).toList();
     });
 
-    // var result2 = await Supabase.instance.client
-    //     .from("penjualan")
-    //     .select("*,detailpenjualan(*, produk(*))")
-    //     .eq("TanggalPenjualan",
-    //         DateFormat("yyyy-MM-dd").format(DateTime.now()));
-    // setState(() {
-    //   penjualan = result2;
-    //   print(produkHariIni);
-    // });
     var result3 = await Supabase.instance.client.from("pelanggan").select();
     setState(() {
       pelanggan = result3;
@@ -89,7 +80,6 @@ class _DashboardState extends State<Dashboard> {
       for (var i = 0; i < penjualan2Hari.length; i++) {
         pendapatan2hariLalu += result[i]["TotalHarga"] as int;
       }
-      print(penjualanKemarin);
     });
   }
 
@@ -153,6 +143,7 @@ class _DashboardState extends State<Dashboard> {
                 child: Column(
                   children: [
                     SfCircularChart(
+                      title: ChartTitle(text: "Statistik membership", textStyle: GoogleFonts.raleway()),
                       tooltipBehavior: TooltipBehavior(enable: true),
                       legend: Legend(isVisible: true),
                       series: <CircularSeries<_ChartData, String>>[
@@ -166,6 +157,7 @@ class _DashboardState extends State<Dashboard> {
                       ],
                     ),
                     SfCartesianChart(
+                      title: ChartTitle(text: "Statistik pendapatan", textStyle: GoogleFonts.raleway()),
                       primaryXAxis: CategoryAxis(),
                       series: <CartesianSeries<CartesianData, String>>[
                         LineSeries(

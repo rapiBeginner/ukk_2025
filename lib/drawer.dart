@@ -30,16 +30,18 @@ myDrawer(BuildContext context, String username, String role, List login) {
           leading: Icon(Icons.stacked_bar_chart),
           title: Text("Dashboard"),
         ),
-        ListTile(
-          onTap: () {
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => Userindex(login: login)));
-          },
-          leading: Icon(Icons.person),
-          title: Text("Pengguna"),
-        ),
+        role == "admin"
+            ? ListTile(
+                onTap: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Userindex(login: login)));
+                },
+                leading: Icon(Icons.person),
+                title: Text("Pengguna"),
+              )
+            : SizedBox(),
         ListTile(
           onTap: () {
             Navigator.pushReplacement(
@@ -60,16 +62,18 @@ myDrawer(BuildContext context, String username, String role, List login) {
           leading: Icon(Icons.card_travel),
           title: Text("Produk"),
         ),
-        ListTile(
-          onTap: () {
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => Penjualanindex(login: login)));
-          },
-          leading: Icon(Icons.shopping_cart),
-          title: Text("Penjualan"),
-        ),
+        role == "petugas"
+            ? ListTile(
+                onTap: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Penjualanindex(login: login)));
+                },
+                leading: Icon(Icons.shopping_cart),
+                title: Text("Penjualan"),
+              )
+            : SizedBox(),
         ListTile(
           onTap: () {
             showDialog(
@@ -93,7 +97,10 @@ myDrawer(BuildContext context, String username, String role, List login) {
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
-                                child: Text("Batal", style: GoogleFonts.raleway(),),
+                                child: Text(
+                                  "Batal",
+                                  style: GoogleFonts.raleway(),
+                                ),
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.red,
                                     foregroundColor: Colors.white),
@@ -105,7 +112,10 @@ myDrawer(BuildContext context, String username, String role, List login) {
                                       MaterialPageRoute(
                                           builder: (context) => MyHomePage()));
                                 },
-                                child: Text("Logout", style: GoogleFonts.raleway(),),
+                                child: Text(
+                                  "Logout",
+                                  style: GoogleFonts.raleway(),
+                                ),
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor:
                                         Color.fromARGB(255, 20, 78, 253),

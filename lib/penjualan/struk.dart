@@ -19,7 +19,6 @@ class _StrukState extends State<Struk> {
   @override
   void initState() {
     super.initState();
-    print(widget.penjualan);
   }
 
   @override
