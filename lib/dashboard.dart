@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:raffi_ukk2025/decimal.dart';
 import 'package:raffi_ukk2025/drawer.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -14,10 +16,18 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   List<_ChartData> data = [];
+  List<CartesianData> data2 =[
+    
+  ];
+  List penjualanHariIni = [];
+  List penjualan2Hari = [];
+  List penjualanKemarin = [];
   List pelanggan = [];
   List produkHabis = [];
   List<Map> produk = [];
-  int totalPendapatan = 0;
+  int pendapatanHariIni = 0;
+  int pendapatanKemarin = 0;
+  int pendapatan2hariLalu = 0;
   List penjualan = [];
   List produkHariIni = [];
   void fetchProduk() async {
@@ -41,27 +51,53 @@ class _DashboardState extends State<Dashboard> {
     // });
     var result3 = await Supabase.instance.client.from("pelanggan").select();
     setState(() {
-      pelanggan=result3;
+      pelanggan = result3;
     });
   }
 
-  void fetchTodaySales() async {
-    var result = await Supabase.instance.client
-        .from("penjualan")
-        .select("TotalHarga")
-        .eq("TanggalPenjualan",
-            DateFormat("yyyy-MM-dd").format(DateTime.now()));
-    for (var i = 0; i < result.length; i++) {
-      totalPendapatan += result[i]["TotalHarga"] as int;
-    }
-    // print(totalPendapatan);
+  void fetchPenjualan() async {
+    var result = await Supabase.instance.client.from("penjualan").select();
+    setState(() {
+      penjualanHariIni = result
+          .where((item) =>
+              item["TanggalPenjualan"] ==
+              DateFormat("yyyy-MM-dd").format(DateTime.now()))
+          .toList();
+
+      for (var i = 0; i < penjualanHariIni.length; i++) {
+        pendapatanHariIni += result[i]["TotalHarga"] as int;
+      }
+
+      penjualanKemarin = result
+          .where((item) =>
+              item["TanggalPenjualan"] ==
+              DateFormat("yyyy-MM-dd")
+                  .format(DateTime.now().subtract(Duration(days: 1))))
+          .toList();
+
+      for (var i = 0; i < penjualanKemarin.length; i++) {
+        pendapatanKemarin += result[i]["TotalHarga"] as int;
+      }
+
+      penjualan2Hari = result
+          .where((item) =>
+              item["TanggalPenjualan"] ==
+              DateFormat("yyyy-MM-dd")
+                  .format(DateTime.now().subtract(Duration(days: 2))))
+          .toList();
+
+      for (var i = 0; i < penjualan2Hari.length; i++) {
+        pendapatan2hariLalu += result[i]["TotalHarga"] as int;
+      }
+      print(penjualanKemarin);
+    });
   }
 
   @override
   void initState() {
     super.initState();
     fetchProduk();
-    fetchTodaySales();
+    fetchPenjualan();
   }
 
   @override
@@ -86,6 +122,18 @@ class _DashboardState extends State<Dashboard> {
               .length
               .toDouble()),
     ];
+    data2 = [
+      CartesianData(
+          DateFormat("dd-MM-yy")
+              .format(DateTime.now().subtract(Duration(days: 2))),
+          pendapatan2hariLalu),
+      CartesianData(
+          DateFormat("dd-MM-yy")
+              .format(DateTime.now().subtract(Duration(days: 1))),
+          pendapatanKemarin),
+      CartesianData(
+          DateFormat("dd-MM-yy").format(DateTime.now()), pendapatanHariIni),
+    ];
     return Scaffold(
       drawer: myDrawer(context, widget.login[0]["Username"],
           widget.login[0]["Role"], widget.login),
@@ -93,7 +141,7 @@ class _DashboardState extends State<Dashboard> {
         centerTitle: true,
         backgroundColor: Color.fromARGB(255, 20, 78, 253),
         foregroundColor: Colors.white,
-        title: Text("Dashboard"),
+        title: Text("Dashboard", style: GoogleFonts.raleway(),),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -117,29 +165,50 @@ class _DashboardState extends State<Dashboard> {
                         )
                       ],
                     ),
-                    Text("Data produk habis"),
+                    SfCartesianChart(
+                      primaryXAxis: CategoryAxis(),
+                      series: <CartesianSeries<CartesianData, String>>[
+                        LineSeries(
+                          dataSource: data2,
+                          xValueMapper: (CartesianData data2, _) => data2.tgl,
+                          yValueMapper: (CartesianData data2, _) =>
+                              data2.pendapatan,
+                        )
+                      ],
+                    ),
+                    SizedBox(height: MediaQuery.of(context).size.height/15,),
+                    Text("Data produk habis", style: GoogleFonts.raleway(fontWeight: FontWeight.bold)),
+                    SizedBox(height: MediaQuery.of(context).size.height/20,),
                     Table(
-                      border: TableBorder.all(),
+                      border: TableBorder.all(borderRadius: BorderRadius.circular(10)),
                       columnWidths: {
                         0: FlexColumnWidth(1),
                         1: FlexColumnWidth(5),
                       },
                       children: [
-                        ...List.generate(produkHabis.length, (index) {
-                          return TableRow(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10)),
-                              children: [
-                                Center(child: Text("${index + 1}")),
+                        TableRow(
+children: [
+                                Center(child: Text("No", style: GoogleFonts.raleway())),
                                 Center(
                                     child: Text(
-                                        "${produkHabis[index]["NamaProduk"]}")),
+                                        "Nama Produk", style: GoogleFonts.raleway())),
+                                // Text(""),
+                              ]
+                        ),
+                        ...List.generate(produkHabis.length, (index) {
+                          return TableRow(
+                              children: [
+                                Center(child: Text("${index + 1}", style: GoogleFonts.raleway())),
+                                Center(
+                                    child: Text(
+                                        "${produkHabis[index]["NamaProduk"]}", style: GoogleFonts.raleway())),
                                 // Text(""),
                               ]);
                         })
                       ],
                     ),
-                    Text("Total pendapatan hari ini: Rp.${totalPendapatan}"),
+                     SizedBox(height: MediaQuery.of(context).size.height/15,),
+                    Text("Total pendapatan hari ini: Rp.${decimal(pendapatanHariIni.toString())}", style: GoogleFonts.raleway()),
                   ],
                 ),
               ),
@@ -156,4 +225,11 @@ class _ChartData {
 
   final String x;
   final double y;
+}
+
+class CartesianData {
+  CartesianData(this.tgl, this.pendapatan);
+
+  final String tgl;
+  final int pendapatan;
 }

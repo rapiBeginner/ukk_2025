@@ -12,11 +12,11 @@ void main() async {
   WidgetsBinding widgetBind = WidgetsFlutterBinding.ensureInitialized();
   // FlutterNativeSplash.preserve(widgetsBinding: widgetBind);
   await Supabase.initialize(
-      url: "https://ewuvaeitvhljewbodryx.supabase.co",
+      url: "https://npamiaxplonxixhssrxv.supabase.co",
       anonKey:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV3dXZhZWl0dmhsamV3Ym9kcnl4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk0MDkwMjgsImV4cCI6MjA1NDk4NTAyOH0.qoQSGpYCJzJFANMQyzD7fvS6523bRInFni1s9cPhQt0");
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5wYW1pYXhwbG9ueGl4aHNzcnh2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk5Mzc3MzgsImV4cCI6MjA1NTUxMzczOH0._wRz8u9sgv4dxJG_kkpU8RG5LT3S85OrO37NX8Buxko");
   runApp(const MyApp());
-  // var check= await Supabase.instance.client.from('produk').select();
+  // var check= await Supabase.instance.client.from('produk').selsect();
   // print(check);
 }
 
@@ -40,7 +40,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  
   final formKey = GlobalKey<FormState>();
   final usernameCtrl = TextEditingController();
   final pwCtrl = TextEditingController();
@@ -51,6 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     splashScreen();
   }
+
   String encryptPassword(String password) {
     return base64Encode(utf8.encode(password));
   }
@@ -243,8 +243,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               ),
                               ElevatedButton(
                                 onPressed: () {
-                                  login();
                                   // print(encryptPassword(pwCtrl.text));
+                                  login();
                                 },
                                 style: ElevatedButton.styleFrom(
                                     fixedSize: Size(constraint.maxWidth / 2,
